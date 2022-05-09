@@ -19,7 +19,6 @@ public class VtnLogin extends javax.swing.JFrame {
         if(bd.registrarDriver()!=0){
             JOptionPane.showConfirmDialog(this, "queso");
         }
-        
     }
 
     @SuppressWarnings("unchecked")
