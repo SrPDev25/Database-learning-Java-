@@ -68,5 +68,9 @@ public class Conexion {
         resultado = 0;
         return resultado;
     }
+    
+    public void cerrar(){
+        
+    }
 
 }

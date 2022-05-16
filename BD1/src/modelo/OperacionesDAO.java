@@ -38,6 +38,10 @@ public class OperacionesDAO {
         return u;
     }
 
+    /**
+     * Metodo creado porque se puede
+     * @return 
+     */
     public ArrayList<Usuario> getTodoslosUsuarios() {
         Usuario u = null;
         ArrayList<Usuario> usuarios = new ArrayList<>();
