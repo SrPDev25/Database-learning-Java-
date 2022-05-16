@@ -1,24 +1,30 @@
-
 package vista;
 
 import baseDeDatos.Conexion;
 import javax.swing.JOptionPane;
-
+import modelo.OperacionesDAO;
+import modelo.Usuario;
 
 public class VtnLogin extends javax.swing.JFrame {
 
     Conexion bd;
+    OperacionesDAO operaciones;
+
     public VtnLogin() {
         int resultado;
         initComponents();
-        bd=new Conexion();
+        bd = new Conexion();
         /*
         jdbc:mysql: + // + (ubicacion del server) + (puerto por donde pasa, 33 generalmente)
          */
-        resultado=bd.establecer("jdbc:mysql://localhost:3306/prog_primera_base");
-        if(bd.registrarDriver()!=0){
-            JOptionPane.showConfirmDialog(this, "queso");
+        resultado = bd.establecer("jdbc:mysql://localhost:3306/prog_primera_base");
+        if (bd.registrarDriver() != 0) {
+            JOptionPane.showConfirmDialog(this, "Tiene un problema con la bd");
+            System.exit(-1);
         }
+
+        operaciones = new OperacionesDAO(bd);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -43,6 +49,11 @@ public class VtnLogin extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jButton1.setText("Login");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -86,6 +97,17 @@ public class VtnLogin extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String login = txtLogin.getText().trim();
+        String pass = new String(pswPass.getPassword());
+
+        Usuario u = operaciones.existeUsuario(login, pass);
+        if (u != null) {
+            JOptionPane.showMessageDialog(this, "Usuario confirmado");
+        } else
+            JOptionPane.showMessageDialog(this, "Usuario confirmado");
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
