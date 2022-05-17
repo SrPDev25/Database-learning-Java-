@@ -3,9 +3,10 @@ package vista;
 import baseDeDatos.Conexion;
 import javax.swing.JOptionPane;
 import modelo.OperacionesDAO;
+import control.MyJFrame;
 import modelo.Usuario;
 
-public class VtnLogin extends javax.swing.JFrame {
+public class VtnLogin extends MyJFrame {
 
     Conexion bd;
     OperacionesDAO operaciones;
@@ -13,6 +14,7 @@ public class VtnLogin extends javax.swing.JFrame {
     public VtnLogin() {
         int resultado;
         initComponents();
+        centrar();
         bd = new Conexion();
         /*
         jdbc:mysql: + // + (ubicacion del server) + (puerto por donde pasa, 33 generalmente)
@@ -107,11 +109,24 @@ public class VtnLogin extends javax.swing.JFrame {
         String login = txtLogin.getText().trim();
         String pass = new String(pswPass.getPassword());
 
+        //Confirmacion con metodo char
+        char tipo=operaciones.existeUsuarioChar(pass, login);
+        if(tipo!=' '){
+            new VtnOperaciones(tipo).setVisible(true);
+            dispose();
+            pack();
+        }
+        
+        /*//Confirmacion de usuario devolviendo un usuario (con datos innecesarios)
         Usuario u = operaciones.existeUsuario(login, pass);
         if (u != null) {
-            JOptionPane.showMessageDialog(this, "Usuario confirmado");
+            new VtnOperaciones().setVisible(true);//Ya no pasamos la empresa ya
+            //que tenemos todo en la base de datos
+            dispose();
+            pack();
         } else
-            JOptionPane.showMessageDialog(this, "Usuario confirmado");
+            JOptionPane.showMessageDialog(this, "Usuario  confirmado");
+        */
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed

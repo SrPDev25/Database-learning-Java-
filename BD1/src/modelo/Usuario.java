@@ -12,11 +12,15 @@ public class Usuario {
     private String nombre;
     private String pass;
     private String login;
+    private int codigo;
+    private char tipoUsuario;
 
-    public Usuario(String nombre, String pass, String login) {
+    public Usuario(String nombre, String pass, String login, int codigo, char tipoUsuario) {
         this.nombre = nombre;
         this.pass = pass;
         this.login = login;
+        this.codigo = codigo;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public String getNombre() {
