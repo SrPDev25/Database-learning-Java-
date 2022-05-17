@@ -12,9 +12,8 @@ import control.MyJFrame;
  */
 public class VtnOperaciones extends MyJFrame {
 
-    /**
-     * Creates new form VtnOperaciones
-     */
+    PanelAsignar paneAsignar;
+    
     public VtnOperaciones(char tipoUsuario) {
         initComponents();
         centrar();
@@ -46,6 +45,11 @@ public class VtnOperaciones extends MyJFrame {
         jMenu1.setText("Operaciones");
 
         mnuAsignarM.setText("Asignar medicacion");
+        mnuAsignarM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAsignarMActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnuAsignarM);
 
         mnuConsultaM.setText("Consulta medicacion");
@@ -90,7 +94,18 @@ public class VtnOperaciones extends MyJFrame {
         cerrar();
     }//GEN-LAST:event_mnuSalirActionPerformed
 
+    private void mnuAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAsignarMActionPerformed
+        cerrarPanel();
+    }//GEN-LAST:event_mnuAsignarMActionPerformed
 
+    private void cerrarPanel(){
+        try{
+            this.remove(paneAsignar);
+        }catch(Exception ex){
+            
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
