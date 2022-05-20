@@ -5,7 +5,9 @@
 package vista;
 
 import baseDeDatos.Conexion;
-import javax.swing.JOptionPane;
+import java.awt.event.KeyEvent;
+import javax.swing.DefaultComboBoxModel;
+import modelo.Enfermo;
 import modelo.OperacionesDAO;
 
 /**
@@ -16,23 +18,24 @@ public class PanelAsignar extends javax.swing.JPanel {
 
     Conexion bd;
     OperacionesDAO operaciones;
+    DefaultComboBoxModel comboModel;
     
-    public PanelAsignar() {
+    
+    public PanelAsignar(Conexion bd) {
         initComponents();
-        int resultado;
-        bd = new Conexion();
-        /*
-        jdbc:mysql: + // + (ubicacion del server) + (puerto por donde pasa, 33 generalmente)
-         */
-        resultado = bd.establecer("jdbc:mysql://localhost:3306/prog_primera_base");
-        if (bd.registrarDriver() != 0) {
-            JOptionPane.showConfirmDialog(this, "Tiene un problema con la bd");
-            System.exit(-1);
-        }
-
+        this.bd=bd;
+        
         operaciones = new OperacionesDAO(bd);
+        comboModel=new DefaultComboBoxModel();
+        comboEnfermos.setModel(comboModel);//Asignar modelo al combo
+        cargarPacientes();
     }
-
+    
+    private void cargarPacientes(){
+        comboModel.addElement("Selecciona un paciente");
+        comboModel.addAll(operaciones.getEnfermos());//carga todos los enfermos
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,20 +45,33 @@ public class PanelAsignar extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboEnfermos = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        txtMedCode = new javax.swing.JTextField();
+        txtDenominacion = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboEnfermos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel1.setText("PACIENTE");
+
+        txtMedCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMedCodeKeyPressed(evt);
+            }
+        });
+
+        txtDenominacion.setEditable(false);
 
         jLabel2.setText("CODIGO MEDICAMENTO");
 
         jButton1.setText("ASIGNAR");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -68,11 +84,11 @@ public class PanelAsignar extends javax.swing.JPanel {
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboEnfermos, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtMedCode, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(40, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -84,12 +100,12 @@ public class PanelAsignar extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(85, 85, 85)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboEnfermos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtMedCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(57, 57, 57)
                 .addComponent(jButton1)
@@ -97,13 +113,31 @@ public class PanelAsignar extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtMedCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMedCodeKeyPressed
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER) {
+            String codigo=txtMedCode.getText().trim();
+            txtDenominacion.setText(operaciones.getMedicamento(codigo));
+        }
+    }//GEN-LAST:event_txtMedCodeKeyPressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String codigoMedi=txtMedCode.getText().trim();
+        String numeroSeguridadSocial;
+        int pos= comboEnfermos.getSelectedIndex();
+        if (pos!=0) {
+            Enfermo e=(Enfermo) (comboModel.getElementAt(pos));
+            numeroSeguridadSocial=e.getNumeroSeguridadSocial();
+            operaciones.asignarMedicacion(codigoMedi,numeroSeguridadSocial);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> comboEnfermos;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField txtDenominacion;
+    private javax.swing.JTextField txtMedCode;
     // End of variables declaration//GEN-END:variables
 }

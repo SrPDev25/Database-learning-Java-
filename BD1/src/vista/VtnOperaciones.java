@@ -1,10 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package vista;
 
+import baseDeDatos.Conexion;
 import control.MyJFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -12,13 +11,23 @@ import control.MyJFrame;
  */
 public class VtnOperaciones extends MyJFrame {
 
-    PanelAsignar paneAsignar;
+    PanelAsignar panelAsignar;
+    Conexion bd;
     
     public VtnOperaciones(char tipoUsuario) {
         initComponents();
         centrar();
+        int resultado;
+        bd=new Conexion();//Crea la conxion
+        resultado = bd.establecer("jdbc:mysql://localhost:3306/prog_primera_base");//La establece
+        if (bd.registrarDriver() != 0) {//Comprueba que los drivers están
+            JOptionPane.showConfirmDialog(this, "Tiene un problema con la bd");
+            System.exit(-1);
+        }else{
+            bd.cerrar();//cierra la base para que no entre ningun entrometido hasta su uso
+        }
         
-        if(tipoUsuario=='E')
+        if(tipoUsuario=='E')//Por algun motivo los 'E' no pueden asignar
             mnuAsignarM.setVisible(false);
     }
 
@@ -40,6 +49,7 @@ public class VtnOperaciones extends MyJFrame {
         mnuSalir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(300, 300));
         getContentPane().setLayout(new java.awt.FlowLayout());
 
         jMenu1.setText("Operaciones");
@@ -89,6 +99,7 @@ public class VtnOperaciones extends MyJFrame {
     }//GEN-LAST:event_mnuDesconectarActionPerformed
 
     private void mnuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSalirActionPerformed
+        bd.cerrar();//Hay que cerrar la conexión al salir
         dispose();
         pack();
         cerrar();
@@ -96,11 +107,18 @@ public class VtnOperaciones extends MyJFrame {
 
     private void mnuAsignarMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAsignarMActionPerformed
         cerrarPanel();
+        /*
+          Al enviar la conexión te ahorras conectarte
+          varias veces al servidor, pero reduce la seguridad del programa
+         */
+        panelAsignar=new PanelAsignar(bd);
+        getContentPane().add(panelAsignar);
+        pack();
     }//GEN-LAST:event_mnuAsignarMActionPerformed
 
     private void cerrarPanel(){
         try{
-            this.remove(paneAsignar);
+            this.remove(panelAsignar);
         }catch(Exception ex){
             
         }
