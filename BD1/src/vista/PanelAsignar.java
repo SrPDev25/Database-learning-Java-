@@ -7,6 +7,7 @@ package vista;
 import baseDeDatos.Conexion;
 import java.awt.event.KeyEvent;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import modelo.Enfermo;
 import modelo.OperacionesDAO;
 
@@ -124,13 +125,29 @@ public class PanelAsignar extends javax.swing.JPanel {
         String codigoMedi=txtMedCode.getText().trim();
         String numeroSeguridadSocial;
         int pos= comboEnfermos.getSelectedIndex();
+        int resultado=-1;
         if (pos!=0) {
             Enfermo e=(Enfermo) (comboModel.getElementAt(pos));
             numeroSeguridadSocial=e.getNumeroSeguridadSocial();
-            operaciones.asignarMedicacion(codigoMedi,numeroSeguridadSocial);
+            resultado=operaciones.asignarMedicacion(codigoMedi,numeroSeguridadSocial);
+             switch(resultado){
+                    case 1: JOptionPane.showMessageDialog(this, "Asignacion correcta", "info",JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                    case -2:JOptionPane.showMessageDialog(this, "Ya existe la medicacion", "info",JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                    case -1:JOptionPane.showMessageDialog(this, "No existe medicamento", "info",JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                }
+        }else{
+            JOptionPane.showMessageDialog(this, "asignacion correcta", "info",JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void limpiar(){
+        txtDenominacion.setText("");
+        txtMedCode.setText("");
+        comboEnfermos.setSelectedIndex(0);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> comboEnfermos;

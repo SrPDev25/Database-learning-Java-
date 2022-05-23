@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class OperacionesDAO {
 
@@ -84,7 +87,7 @@ public class OperacionesDAO {
             while (resultado.next()) {
                 //Puedes usar la ubicacion de columna o su nombre (pref nombre)
                 e = new Enfermo(resultado.getString("numeroSeguridadSocial"),
-                         resultado.getString(2));
+                        resultado.getString(2));
                 list.add(e);
             }
         } catch (SQLException ex) {
@@ -125,7 +128,7 @@ public class OperacionesDAO {
         try {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeQuery(sql);
-            existe=resultado.next();
+            existe = resultado.next();
             resultado.close();//Se cierra para no mantener la información abierta
             sentencia.close();
         } catch (SQLException ex) {
@@ -134,7 +137,7 @@ public class OperacionesDAO {
 
         return existe;
     }
-    
+
     public boolean existeMedicacion(String codigo, String numSeg) {
         boolean existe = false;
         String sql = "select codigoMedicacion,numeroSegSocial"
@@ -146,24 +149,44 @@ public class OperacionesDAO {
         try {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeQuery(sql);
-            existe=resultado.next();
+            existe = resultado.next();
             resultado.close();//Se cierra para no mantener la información abierta
             sentencia.close();
         } catch (SQLException ex) {
-
+            existe=true;
         }
 
         return existe;
     }
 
-    public void asignarMedicacion(String codigoMedi, String numeroSeguridadSocial) {
+    public int asignarMedicacion(String codigoMedi, String numeroSeguridadSocial) {
+        int resultado=-1;
         if (existeMedicamento(codigoMedi)) {
-            
+            if (!existeMedicacion(codigoMedi, numeroSeguridadSocial)) {
+                resultado = anadirMedicamentoPaciente(codigoMedi, numeroSeguridadSocial);
+            } else {
+                resultado = -2;
+            }
         }
+        return resultado;
+    }
+
+    public int anadirMedicamentoPaciente(String codigoMedi, String codigoSS) {
+        String sql = "INSERT INTO `enfermo-medicación` "
+                + "(`NumeroSegSocial`, `CodigoMedicacion`) VALUES ('"+codigoSS+"', '"+codigoMedi+"');";
+        Statement sentencia;
+        int resultado=-1;
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado=sentencia.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return resultado;
     }
 
     /**
-     * Metodo creado porque se puede
+     * "')"; } Metodo creado porque se puede
      *
      * @return
      */
