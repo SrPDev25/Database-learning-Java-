@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 public class VtnOperaciones extends MyJFrame {
 
     PanelAsignar panelAsignar;
+    PanelConsulta panelConsulta;
     Conexion bd;
     
     public VtnOperaciones(char tipoUsuario) {
@@ -63,6 +64,11 @@ public class VtnOperaciones extends MyJFrame {
         jMenu1.add(mnuAsignarM);
 
         mnuConsultaM.setText("Consulta medicacion");
+        mnuConsultaM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuConsultaMActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnuConsultaM);
 
         jMenuBar1.add(jMenu1);
@@ -116,12 +122,24 @@ public class VtnOperaciones extends MyJFrame {
         pack();
     }//GEN-LAST:event_mnuAsignarMActionPerformed
 
+    private void mnuConsultaMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuConsultaMActionPerformed
+        cerrarPanel();
+        panelConsulta=new PanelConsulta(bd);
+        getContentPane().add(panelConsulta);
+        pack();
+    }//GEN-LAST:event_mnuConsultaMActionPerformed
+
     private void cerrarPanel(){
         try{
             this.remove(panelAsignar);
         }catch(Exception ex){
             
+        }try{
+            this.remove(panelConsulta);
+        }catch(Exception ex){
+            
         }
+        
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

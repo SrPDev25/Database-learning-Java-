@@ -141,7 +141,7 @@ public class OperacionesDAO {
     public boolean existeMedicacion(String codigo, String numSeg) {
         boolean existe = false;
         String sql = "select codigoMedicacion,numeroSegSocial"
-                + " from enfermo-medicacion"
+                + " from enfermoMedicacion"
                 + " where codigoMedicacion='" + codigo + "'"
                 + " and numeroSegSocial='" + numSeg + "'";//Se usa comillas para un primitivo
         ResultSet resultado;
@@ -172,7 +172,7 @@ public class OperacionesDAO {
     }
 
     public int anadirMedicamentoPaciente(String codigoMedi, String codigoSS) {
-        String sql = "INSERT INTO `enfermo-medicación` "
+        String sql = "INSERT INTO `enfermoMedicacion` "
                 + "(`NumeroSegSocial`, `CodigoMedicacion`) VALUES ('"+codigoSS+"', '"+codigoMedi+"');";
         Statement sentencia;
         int resultado=-1;
@@ -215,6 +215,38 @@ public class OperacionesDAO {
         }
         //"Select login,pass, nombre from tblUsuarios where login='+login+'and pass='pass'"
         return usuarios;
+    }
+
+    /**
+     * Devuelve todos los medicamentos recetados a un paciente
+     * @param nSeg
+     * @return 
+     */
+    public ArrayList<Medicamento> consultMedicamento(String nSeg) {
+        //Consulta que retorna la tabla de medicamentos de un paciente
+        String sql="SELECT m.* FROM enfermoMedicación e\n" +
+            "join medicaciones m on e.CodigoMedicacion=m.codigoMedicacion\n" +
+            "where e.NumeroSegSocial='"+nSeg+"'";
+        Statement sentencia;
+        ArrayList<Medicamento> medi=new ArrayList<>();
+        ResultSet resutlado;
+        try {
+            sentencia=bd.getConexion().createStatement();
+            resutlado=sentencia.executeQuery(sql);
+            while(resutlado.next()){
+                Medicamento m= new Medicamento(
+                        resutlado.getString("codigoMedicacion"),
+                        resutlado.getString("Denominacion"), 
+                        resutlado.getString("Indicaciones"));
+                medi.add(m);
+            }
+            resutlado.close();
+            sentencia.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return medi;
     }
 
 }
