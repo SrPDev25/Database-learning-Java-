@@ -4,15 +4,40 @@
  */
 package view;
 
+import control.MyJFrame;
+import dataBaseControl.Conexion;
+import dataBaseControl.OperacionesDAO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author dam
  */
-public class VtnMain extends javax.swing.JFrame {
+public class VtnMain extends MyJFrame {
 
+    Conexion bd;
+    OperacionesDAO operaciones;
     
     public VtnMain() {
         initComponents();
+        centrar();
+        int resultado;
+        
+        bd=new Conexion();
+        resultado=bd.establecer("jdbc:mysql://localhost:3306/dam_programacion_LISTASCOMPRA");
+        if (bd.registrarDriver() !=0) {
+            JOptionPane.showMessageDialog(this, "Tiene un problema con el driver");
+        }
+        
+        if (resultado!=-1) {
+            JOptionPane.showMessageDialog(this, "Conectado al server");
+            
+        }else
+            JOptionPane.showMessageDialog(this, "No conectado al server");
+            
+        
+        
+        
     }
 
     /**
@@ -24,7 +49,12 @@ public class VtnMain extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -39,6 +69,10 @@ public class VtnMain extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        cerrar();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments

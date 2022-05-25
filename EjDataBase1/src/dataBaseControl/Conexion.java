@@ -9,19 +9,20 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+
 /**
  *
  * @author dam
  */
 public class Conexion {
-    
+
     private Connection conexion;
-    
+
     /**
      * Hace un testeo para confirmar de que la libreria de la base de datos
      * existe
      *
-     * @return
+     * @return 0 si detecta el driver -1 si no
      */
     public int registrarDriver() {
         int resultado;
@@ -37,7 +38,8 @@ public class Conexion {
         }
         return resultado;
     }
-     public Connection getConexion() {
+
+    public Connection getConexion() {
         return conexion;
     }
 
@@ -45,7 +47,7 @@ public class Conexion {
      * Establece la conexion
      *
      * @param url
-     * @return retorna por si fallos
+     * @return -1 no hay conexion !=-1
      */
     public int establecer(String url) {
         int resultado;
@@ -61,22 +63,23 @@ public class Conexion {
      * Hace conexion con el servidor
      *
      * @param url
-     * @return retorna un numero con el numero del fallo
+     * @return 0=no hay fallos -2=fallo en login
      */
     public int conectar(String url) {
         int resultado;
         try {
             //Se utiliza la contraseña y usuario de la base de datos
             conexion = DriverManager.getConnection(url, "root", "root");
+            resultado = 0;
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            resultado=-2;
         }
-        resultado = 0;
         return resultado;
     }
-    
-    public void cerrar(){
-        
+
+    public void cerrar() {
+
     }
-    
+
 }
