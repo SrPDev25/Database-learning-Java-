@@ -24,12 +24,12 @@ public class VtnMain extends MyJFrame {
         int resultado;
         
         bd=new Conexion();
-        resultado=bd.establecer("jdbc:mysql://localhost:3306/dam_programacion_LISTASCOMPRA");
+        resultado=bd.establecer("jdbc:mysql://localhost:3306/dam_programacion_listacompras");
         if (bd.registrarDriver() !=0) {
             JOptionPane.showMessageDialog(this, "Tiene un problema con el driver");
         }
         
-        if (resultado!=-1) {
+        if (resultado==0) {
             JOptionPane.showMessageDialog(this, "Conectado al server");
             
         }else
