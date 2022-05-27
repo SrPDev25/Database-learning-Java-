@@ -8,12 +8,12 @@ package view;
  *
  * @author dam
  */
-public class PanelListaBaja extends javax.swing.JPanel {
+public class PanelBaja extends javax.swing.JPanel {
 
     /**
-     * Creates new form PanelListaBaja
+     * Creates new form PanelBaja
      */
-    public PanelListaBaja() {
+    public PanelBaja() {
         initComponents();
     }
 
