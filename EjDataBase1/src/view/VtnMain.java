@@ -18,6 +18,7 @@ public class VtnMain extends MyJFrame {
     Conexion bd;
     OperacionesDAO operaciones;
     PanelAlta panelAlta;
+    PanelBaja panelBaja;
   
     public VtnMain() {
         initComponents();
@@ -65,7 +66,7 @@ public class VtnMain extends MyJFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Listas de la compra");
-        setMinimumSize(new java.awt.Dimension(300, 300));
+        setMinimumSize(new java.awt.Dimension(300, 250));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -84,6 +85,11 @@ public class VtnMain extends MyJFrame {
         jMenu1.add(mnuCategoriaAlta);
 
         mnuCategoriaBaja.setText("Baja");
+        mnuCategoriaBaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCategoriaBajaActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnuCategoriaBaja);
 
         mnuCategoriaConsulta.setText("Consulta");
@@ -150,6 +156,13 @@ public class VtnMain extends MyJFrame {
         this.getContentPane().add(panelAlta);
         pack();
     }//GEN-LAST:event_mnuCategoriaAltaActionPerformed
+
+    private void mnuCategoriaBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCategoriaBajaActionPerformed
+        clearPanels();
+        panelBaja=new PanelBaja(bd);
+        this.getContentPane().add(panelBaja);
+        pack();
+    }//GEN-LAST:event_mnuCategoriaBajaActionPerformed
 
     /**
      * @param args the command line arguments

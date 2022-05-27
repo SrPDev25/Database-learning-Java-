@@ -7,8 +7,10 @@ package dataBaseControl;
 import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Categoria;
 
 /**
  *
@@ -38,10 +40,27 @@ public class OperacionesDAO {
 
         return resultado;
     }
+    
+    public int eliminarCategoria(int codigo) {
+        String sql = "delete from tblCategorias where codigo_categoria='"+codigo+"' ";
+        Statement sentencia;
+        int resultado = -1;
+        if (!existeCategoria(codigo)) {
+
+            try {
+                sentencia = bd.getConexion().createStatement();
+                resultado = sentencia.executeUpdate(sql);
+            } catch (SQLException ex) {
+                Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return resultado;
+    }
 
     private boolean existeCategoria(int codigo) {
         boolean existe = false;
-        String sql = "select codigo_categoria from tblcategorias where codigo_categoria='"+codigo+"'";
+        String sql = "select codigo_categoria from tblcategorias where codigo_categoria='" + codigo + "'";
         Statement sentencia;
         ResultSet resultado;
 
@@ -56,4 +75,27 @@ public class OperacionesDAO {
         return existe;
 
     }
+
+    public ArrayList<Categoria> getCategorias() {
+        ArrayList<Categoria> categorias = new ArrayList<>();
+        String sql = "select codigo_categoria, denominacion from tblcategorias";
+        Statement sentencia;
+        ResultSet resultado;
+
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeQuery(sql);
+            
+            while(resultado.next()){
+                categorias.add(new Categoria(
+                        resultado.getInt("codigo_categoria")
+                        ,resultado.getString("denominacion") ));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return categorias;
+    }
+
 }

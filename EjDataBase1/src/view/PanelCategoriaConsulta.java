@@ -4,17 +4,22 @@
  */
 package view;
 
+import dataBaseControl.Conexion;
+import dataBaseControl.OperacionesDAO;
+
 /**
  *
  * @author dam
  */
 public class PanelCategoriaConsulta extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PanelConsultaCategoria
-     */
-    public PanelCategoriaConsulta() {
+    Conexion bd;
+    OperacionesDAO operaciones;
+    public PanelCategoriaConsulta(Conexion bd) {
         initComponents();
+        this.bd=bd;
+        
+        
     }
 
     /**

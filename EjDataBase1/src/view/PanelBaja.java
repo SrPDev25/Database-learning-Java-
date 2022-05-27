@@ -4,17 +4,35 @@
  */
 package view;
 
+import dataBaseControl.Conexion;
+import dataBaseControl.OperacionesDAO;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import model.Categoria;
+
 /**
  *
  * @author dam
  */
 public class PanelBaja extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PanelBaja
-     */
-    public PanelBaja() {
+    Conexion bd;
+    OperacionesDAO operaciones;
+    DefaultComboBoxModel comboModel;
+    
+    public PanelBaja(Conexion bd) {
         initComponents();
+        this.bd=bd;
+        operaciones=new OperacionesDAO(bd);
+        
+        comboModel=new DefaultComboBoxModel();
+        combo.setModel(comboModel);
+        cargarCategorias();
+    }
+    
+    private void cargarCategorias(){
+        comboModel.addElement("Seleciona categoria");
+        comboModel.addAll(operaciones.getCategorias());
     }
 
     /**
@@ -26,19 +44,75 @@ public class PanelBaja extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        combo = new javax.swing.JComboBox<>();
+        btnEliminar = new javax.swing.JButton();
+        lblError = new javax.swing.JLabel();
+
+        jLabel1.setFont(new java.awt.Font("Consolas", 1, 36)); // NOI18N
+        jLabel1.setText("Baja");
+
+        combo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnEliminar.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnEliminar)
+                .addGap(25, 25, 25))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(119, 119, 119)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(97, 97, 97)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(103, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jLabel1)
+                .addGap(48, 48, 48)
+                .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnEliminar)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int seleccionado=combo.getSelectedIndex();
+        if(seleccionado!=0){
+            Categoria categoria=(Categoria)(comboModel.getSelectedItem());
+            operaciones.eliminarCategoria(categoria.getCodigo());
+            comboModel.removeElement(categoria);
+            JOptionPane.showMessageDialog(this, "Eliminado correctamente", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
+        }else
+            lblError.setText("No se seleccionó ninguna categoria");
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JComboBox<String> combo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblError;
     // End of variables declaration//GEN-END:variables
 }
