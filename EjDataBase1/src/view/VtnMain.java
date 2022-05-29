@@ -17,14 +17,17 @@ public class VtnMain extends MyJFrame {
 
     Conexion bd;
     OperacionesDAO operaciones;
-    PanelAlta panelAlta;
-    PanelBaja panelBaja;
-  
+    PanelCategoriasAlta panelCategoriaAlta;
+    PanelCategoriasBaja panelCategoriaBaja;
+    PanelCategoriasConsulta panelCategoriaConsulta;
+    PanelProductoAlta panelProductoAlta;
+    PanelProductoBaja panelProductoBaja;
+    
     public VtnMain() {
         initComponents();
         centrar();
         int resultado;
-        
+
         bd = new Conexion();
         resultado = bd.establecer("jdbc:mysql://localhost:3306/dam_programacion_listacompras");
         if (bd.registrarDriver() != 0) {
@@ -34,8 +37,8 @@ public class VtnMain extends MyJFrame {
         if (resultado != 0) {
             JOptionPane.showMessageDialog(this, "No conectado al server");
         }
-        operaciones=new OperacionesDAO(bd);
-        
+        operaciones = new OperacionesDAO(bd);
+
     }
 
     /**
@@ -75,6 +78,11 @@ public class VtnMain extends MyJFrame {
         getContentPane().setLayout(new java.awt.FlowLayout());
 
         jMenu1.setText("Categoria");
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
+            }
+        });
 
         mnuCategoriaAlta.setText("Alta");
         mnuCategoriaAlta.addActionListener(new java.awt.event.ActionListener() {
@@ -93,6 +101,11 @@ public class VtnMain extends MyJFrame {
         jMenu1.add(mnuCategoriaBaja);
 
         mnuCategoriaConsulta.setText("Consulta");
+        mnuCategoriaConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCategoriaConsultaActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnuCategoriaConsulta);
 
         jMenuBar1.add(jMenu1);
@@ -100,9 +113,19 @@ public class VtnMain extends MyJFrame {
         jMenu2.setText("Producto");
 
         mnuProductoAlta.setText("Alta");
+        mnuProductoAlta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuProductoAltaActionPerformed(evt);
+            }
+        });
         jMenu2.add(mnuProductoAlta);
 
         mnuProductobaja.setText("Baja");
+        mnuProductobaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuProductobajaActionPerformed(evt);
+            }
+        });
         jMenu2.add(mnuProductobaja);
 
         mnuProductoConsulta.setText("Consulta");
@@ -152,17 +175,42 @@ public class VtnMain extends MyJFrame {
 
     private void mnuCategoriaAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCategoriaAltaActionPerformed
         clearPanels();
-        panelAlta=new PanelAlta(bd);
-        this.getContentPane().add(panelAlta);
+        panelCategoriaAlta = new PanelCategoriasAlta(bd);
+        this.getContentPane().add(panelCategoriaAlta);
         pack();
     }//GEN-LAST:event_mnuCategoriaAltaActionPerformed
 
     private void mnuCategoriaBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCategoriaBajaActionPerformed
         clearPanels();
-        panelBaja=new PanelBaja(bd);
-        this.getContentPane().add(panelBaja);
+        panelCategoriaBaja = new PanelCategoriasBaja(bd);
+        this.getContentPane().add(panelCategoriaBaja);
         pack();
     }//GEN-LAST:event_mnuCategoriaBajaActionPerformed
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void mnuCategoriaConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCategoriaConsultaActionPerformed
+        clearPanels();
+        panelCategoriaConsulta = new PanelCategoriasConsulta(bd);
+        this.getContentPane().add(panelCategoriaConsulta);
+        pack();
+    }//GEN-LAST:event_mnuCategoriaConsultaActionPerformed
+
+    private void mnuProductoAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProductoAltaActionPerformed
+        clearPanels();
+        panelProductoAlta = new PanelProductoAlta (bd);
+        this.getContentPane().add(panelProductoAlta);
+        pack();
+    }//GEN-LAST:event_mnuProductoAltaActionPerformed
+
+    private void mnuProductobajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProductobajaActionPerformed
+        clearPanels();
+        panelProductoBaja = new PanelProductoBaja(bd);
+        this.getContentPane().add(panelProductoBaja);
+        pack();
+    }//GEN-LAST:event_mnuProductobajaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,15 +247,35 @@ public class VtnMain extends MyJFrame {
         });
     }
 
-    private void clearPanels(){
-        try{
-            this.remove(panelAlta);
-        }catch(Exception ex){
-            
+    private void clearPanels() {
+        try {
+            this.remove(panelCategoriaAlta);
+        } catch (Exception ex) {
+
         }
+        try {
+            this.remove(panelCategoriaBaja);
+        } catch (Exception ex) {
+
+        }
+        try {
+            this.remove(panelCategoriaConsulta);
+        } catch (Exception ex) {
+
+        }
+         try {
+            this.remove(panelProductoAlta);
+        } catch (Exception ex) {
+
+        }try {
+            this.remove(panelProductoBaja);
+        } catch (Exception ex) {
+
+        }
+
     }
-            
-            
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

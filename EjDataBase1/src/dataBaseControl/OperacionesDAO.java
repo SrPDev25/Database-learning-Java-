@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Categoria;
+import model.Producto;
 
 /**
  *
@@ -19,6 +20,8 @@ import model.Categoria;
 public class OperacionesDAO {
 
     Conexion bd;
+    
+    
 
     public OperacionesDAO(Conexion bd) {
         this.bd = bd;
@@ -40,19 +43,17 @@ public class OperacionesDAO {
 
         return resultado;
     }
-    
+
     public int eliminarCategoria(int codigo) {
-        String sql = "delete from tblCategorias where codigo_categoria='"+codigo+"' ";
+        String sql = "delete from tblCategorias where codigo_categoria='" + codigo + "' ";
         Statement sentencia;
         int resultado = -1;
-        if (!existeCategoria(codigo)) {
 
-            try {
-                sentencia = bd.getConexion().createStatement();
-                resultado = sentencia.executeUpdate(sql);
-            } catch (SQLException ex) {
-                Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return resultado;
@@ -85,11 +86,11 @@ public class OperacionesDAO {
         try {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeQuery(sql);
-            
-            while(resultado.next()){
+
+            while (resultado.next()) {
                 categorias.add(new Categoria(
-                        resultado.getInt("codigo_categoria")
-                        ,resultado.getString("denominacion") ));
+                        resultado.getInt("codigo_categoria"),
+                         resultado.getString("denominacion")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -98,4 +99,77 @@ public class OperacionesDAO {
         return categorias;
     }
 
+    
+    public int insertarProducto(int codigo, String denominacion, int codigo_categoria) {
+        String sql = "insert into tblProductos values ('" + codigo + "','" + denominacion + "','" + codigo_categoria + "');";
+        Statement sentencia;
+        int resultado = -1;
+        if (!existeProducto(codigo)) {
+
+            try {
+                sentencia = bd.getConexion().createStatement();
+                resultado = sentencia.executeUpdate(sql);
+            } catch (SQLException ex) {
+                Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return resultado;
+    }
+
+    public int eliminarProducto(int codigo) {
+        String sql = "delete from tblProductos where codigo_producto='" + codigo + "' ";
+        Statement sentencia;
+        int resultado = -1;
+
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return resultado;
+    }
+
+    private boolean existeProducto(int codigo) {
+        boolean existe = false;
+        String sql = "select codigo_Producto from tblProductos where codigo_producto='" + codigo + "'";
+        Statement sentencia;
+        ResultSet resultado;
+
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeQuery(sql);
+            existe = resultado.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return existe;
+
+    }
+    
+    public ArrayList<Producto> getProductos() {
+        ArrayList<Producto> categorias = new ArrayList<>();
+        String sql = "select codigo_producto, denominacion, codigo_categoria from tblProductos";
+        Statement sentencia;
+        ResultSet resultado;
+
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeQuery(sql);
+
+            while (resultado.next()) {
+                categorias.add(new Producto(
+                        resultado.getInt("codigo_producto"),
+                         resultado.getString("denominacion")
+                        ,resultado.getInt("codigo_categoria")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return categorias;
+    }
 }
