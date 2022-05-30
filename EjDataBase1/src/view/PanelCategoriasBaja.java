@@ -105,9 +105,15 @@ public class PanelCategoriasBaja extends javax.swing.JPanel {
         int seleccionado=combo.getSelectedIndex();
         if(seleccionado!=0){
             Categoria categoria=(Categoria)(comboModel.getSelectedItem());
+            //Comprueba que la categoria no tenga ningun producto
+            if (operaciones.getProductos(categoria.getCodigo()).isEmpty()) {
             operaciones.eliminarCategoria(categoria.getCodigo());
             comboModel.removeElement(categoria);
-            JOptionPane.showMessageDialog(this, "Eliminado correctamente", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Eliminado correctamente"
+                    , "Eliminado", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                lblError.setText("Tiene productos asociados a esta categoria");
+            }
         }else
             lblError.setText("No se seleccionó ninguna categoria");
     }//GEN-LAST:event_btnEliminarActionPerformed
