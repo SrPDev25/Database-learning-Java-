@@ -1,13 +1,15 @@
 package modelo;
 
 import baseDeDatos.Conexion;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 public class OperacionesDAO {
 
@@ -22,6 +24,8 @@ public class OperacionesDAO {
         int resultado = bd.establecer("jdbc:mysql://localhost:3306/prog_primera_base");
 
     }
+
+    
 
     public Usuario existeUsuario(String pass, String login) {
         Usuario u = null;
@@ -153,14 +157,14 @@ public class OperacionesDAO {
             resultado.close();//Se cierra para no mantener la información abierta
             sentencia.close();
         } catch (SQLException ex) {
-            existe=true;
+            existe = true;
         }
 
         return existe;
     }
 
     public int asignarMedicacion(String codigoMedi, String numeroSeguridadSocial) {
-        int resultado=-1;
+        int resultado = -1;
         if (existeMedicamento(codigoMedi)) {
             if (!existeMedicacion(codigoMedi, numeroSeguridadSocial)) {
                 resultado = anadirMedicamentoPaciente(codigoMedi, numeroSeguridadSocial);
@@ -173,12 +177,12 @@ public class OperacionesDAO {
 
     public int anadirMedicamentoPaciente(String codigoMedi, String codigoSS) {
         String sql = "INSERT INTO `enfermoMedicacion` "
-                + "(`NumeroSegSocial`, `CodigoMedicacion`) VALUES ('"+codigoSS+"', '"+codigoMedi+"');";
+                + "(`NumeroSegSocial`, `CodigoMedicacion`) VALUES ('" + codigoSS + "', '" + codigoMedi + "');";
         Statement sentencia;
-        int resultado=-1;
+        int resultado = -1;
         try {
             sentencia = bd.getConexion().createStatement();
-            resultado=sentencia.executeUpdate(sql);
+            resultado = sentencia.executeUpdate(sql);
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -219,24 +223,25 @@ public class OperacionesDAO {
 
     /**
      * Devuelve todos los medicamentos recetados a un paciente
+     *
      * @param nSeg
-     * @return 
+     * @return
      */
     public ArrayList<Medicamento> consultMedicamento(String nSeg) {
         //Consulta que retorna la tabla de medicamentos de un paciente
-        String sql="SELECT m.* FROM enfermoMedicación e\n" +
-            "join medicaciones m on e.CodigoMedicacion=m.codigoMedicacion\n" +
-            "where e.NumeroSegSocial='"+nSeg+"'";
+        String sql = "SELECT m.* FROM enfermoMedicación e\n"
+                + "join medicaciones m on e.CodigoMedicacion=m.codigoMedicacion\n"
+                + "where e.NumeroSegSocial='" + nSeg + "'";
         Statement sentencia;
-        ArrayList<Medicamento> medi=new ArrayList<>();
+        ArrayList<Medicamento> medi = new ArrayList<>();
         ResultSet resutlado;
         try {
-            sentencia=bd.getConexion().createStatement();
-            resutlado=sentencia.executeQuery(sql);
-            while(resutlado.next()){
-                Medicamento m= new Medicamento(
+            sentencia = bd.getConexion().createStatement();
+            resutlado = sentencia.executeQuery(sql);
+            while (resutlado.next()) {
+                Medicamento m = new Medicamento(
                         resutlado.getString("codigoMedicacion"),
-                        resutlado.getString("Denominacion"), 
+                        resutlado.getString("Denominacion"),
                         resutlado.getString("Indicaciones"));
                 medi.add(m);
             }
@@ -245,7 +250,7 @@ public class OperacionesDAO {
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return medi;
     }
 

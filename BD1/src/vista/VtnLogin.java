@@ -1,10 +1,10 @@
 package vista;
 
 import baseDeDatos.Conexion;
+import control.Encriptar;
 import javax.swing.JOptionPane;
 import modelo.OperacionesDAO;
 import control.MyJFrame;
-import modelo.Usuario;
 
 public class VtnLogin extends MyJFrame {
 
@@ -110,7 +110,7 @@ public class VtnLogin extends MyJFrame {
         String pass = new String(pswPass.getPassword());
 
         //Confirmacion con metodo char
-        char tipo=operaciones.existeUsuarioChar(pass, login);
+        char tipo=operaciones.existeUsuarioChar(Encriptar.getMD5(pass), login);
         if(tipo!=' '){
             new VtnOperaciones(tipo).setVisible(true);
             dispose();
