@@ -172,4 +172,27 @@ public class OperacionesDAO {
 
         return categorias;
     }
+    
+    public ArrayList<Producto> getProductos(int codigoCategoria) {
+        ArrayList<Producto> categorias = new ArrayList<>();
+        String sql = "select codigo_producto, denominacion, codigo_categoria from tblProductos where codigo_categoria='"+codigoCategoria+"'";
+        Statement sentencia;
+        ResultSet resultado;
+
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeQuery(sql);
+
+            while (resultado.next()) {
+                categorias.add(new Producto(
+                        resultado.getInt("codigo_producto"),
+                         resultado.getString("denominacion")
+                        ,resultado.getInt("codigo_categoria")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return categorias;
+    }
 }

@@ -8,8 +8,8 @@ import dataBaseControl.Conexion;
 import dataBaseControl.OperacionesDAO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
 import model.Categoria;
+import model.Producto;
 
 /**
  *
@@ -32,11 +32,15 @@ public class PanelProductoBaja extends javax.swing.JPanel {
         listModel=new DefaultListModel();
         listProductos.setModel(listModel);
         cargarCategorias();
-        cargarProductos();
+        //cargarProductos();
     }
     
     private void cargarProductos(){
         listModel.addAll(operaciones.getProductos());
+    }
+    
+    private void cargarProductos(int codigoCategoria){
+        listModel.addAll(operaciones.getProductos(codigoCategoria));
     }
     
     private void cargarCategorias(){
@@ -65,6 +69,16 @@ public class PanelProductoBaja extends javax.swing.JPanel {
         jLabel1.setText("Baja");
 
         combo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        combo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                comboMouseClicked(evt);
+            }
+        });
+        combo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnEliminar.setText("Eliminar");
@@ -128,16 +142,36 @@ public class PanelProductoBaja extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int seleccionado=combo.getSelectedIndex();
-        if(seleccionado!=0){
-            Categoria categoria=(Categoria)(comboModel.getSelectedItem());
-            operaciones.eliminarProducto(categoria.getCodigo());
-            comboModel.removeElement(categoria);
-            JOptionPane.showMessageDialog(this, "Eliminado correctamente", "Eliminado", JOptionPane.INFORMATION_MESSAGE);
-        }else
-            lblError.setText("No se seleccionó ninguna categoria");
+        int seleccionado=listProductos.getSelectedIndex();
+        Producto producto=null;
+        
+        if (seleccionado<0) {
+            lblError.setText("No se selecciono un producto");
+        }else{
+            producto=(Producto)listModel.getElementAt(seleccionado);
+            operaciones.eliminarProducto(producto.getCodigo());
+            listModel.removeElement(producto);
+            lblError.setText("");
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
+    private void comboMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboMouseClicked
+        
+    }//GEN-LAST:event_comboMouseClicked
+
+    private void comboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboActionPerformed
+        cleanList();
+        if (combo.getSelectedIndex()!=0) {
+            Categoria categoria=(Categoria) comboModel.getElementAt(combo.getSelectedIndex());
+            cargarProductos(categoria.getCodigo());
+        }else{
+            cargarProductos();
+        }
+    }//GEN-LAST:event_comboActionPerformed
+
+    private void cleanList(){
+        listModel.removeAllElements();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminar;
