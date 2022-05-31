@@ -6,11 +6,12 @@ package view;
 
 import dataBaseControl.Conexion;
 import dataBaseControl.OperacionesDAO;
+import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
 import model.Categoria;
 import model.Producto;
-import model.ProductoCogido;
 
 /**
  *
@@ -22,7 +23,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
     OperacionesDAO operaciones;
     DefaultComboBoxModel comboModel;
     DefaultListModel listOpcionesModel;
-    DefaultListModel listCarritoModel;
+    DefaultTableModel tableModel;
     
     public PanelListaAlta(Conexion bd) {
         initComponents();
@@ -33,8 +34,9 @@ public class PanelListaAlta extends javax.swing.JPanel {
         combo.setModel(comboModel);
         listOpcionesModel=new DefaultListModel();
         listProductos.setModel(listOpcionesModel);
-        listCarritoModel= new DefaultListModel();
-        listCarrito.setModel(listCarritoModel);
+        tableModel= new DefaultTableModel();
+        tblCarrito.setModel(tableModel);
+        tableModel.setColumnIdentifiers(new String[] {"Producto", "Cantidad"});
         cargarCategorias();
         //cargarProductos();
     }
@@ -81,7 +83,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
         lblErrorDenominacion = new javax.swing.JLabel();
         lblErrorLista1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblCarrito = new javax.swing.JTable();
 
         jLabel1.setFont(new java.awt.Font("Consolas", 1, 36)); // NOI18N
         jLabel1.setText("Alta Lista");
@@ -136,7 +138,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
 
         lblErrorLista1.setForeground(java.awt.Color.red);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblCarrito.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -147,7 +149,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(tblCarrito);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -246,7 +248,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
                                 .addComponent(txtDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblErrorDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblErrorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(77, 77, 77)
+                        .addGap(39, 39, 39)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
@@ -284,13 +286,13 @@ public class PanelListaAlta extends javax.swing.JPanel {
         }else{
             lblErrorLista1.setText("");
             producto=(Producto)listOpcionesModel.getElementAt(pos);
-            ProductoCogido productoCogido= new ProductoCogido(producto, cantidad);
-            int posList=listCarritoModel.indexOf(new ProductoCogido(producto));
-            if (posList!=-1) {
-                
-            }
             
-            listCarritoModel.addElement(productoCogido);
+            
+            
+            Vector v=new Vector();
+            v.add(producto);
+            v.add(cantidad);
+            tableModel.addRow(v);
         }
     }//GEN-LAST:event_btnAnnadirActionPerformed
 
@@ -311,12 +313,12 @@ public class PanelListaAlta extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblErrorCantidad;
     private javax.swing.JLabel lblErrorCodigo;
     private javax.swing.JLabel lblErrorDenominacion;
     private javax.swing.JLabel lblErrorLista1;
     private javax.swing.JList<String> listProductos;
+    private javax.swing.JTable tblCarrito;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDenominacion;
