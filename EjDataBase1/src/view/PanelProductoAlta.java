@@ -193,7 +193,7 @@ public class PanelProductoAlta extends javax.swing.JPanel {
             error = true;
             lblErrorDenominacion.setText("*");
         } else {
-            lblErrorCodigo.setText("");
+            lblErrorDenominacion.setText("");
         }
 
         if (comboCategorias.getSelectedIndex() == 0) {

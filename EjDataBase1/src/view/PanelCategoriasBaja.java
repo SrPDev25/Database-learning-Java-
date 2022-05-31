@@ -67,6 +67,8 @@ public class PanelCategoriasBaja extends javax.swing.JPanel {
             }
         });
 
+        lblError.setForeground(java.awt.Color.red);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(

@@ -22,6 +22,7 @@ public class VtnMain extends MyJFrame {
     PanelCategoriasConsulta panelCategoriaConsulta;
     PanelProductoAlta panelProductoAlta;
     PanelProductoBaja panelProductoBaja;
+    PanelProductoConsulta panelProductoConsulta;
     
     public VtnMain() {
         initComponents();
@@ -166,7 +167,10 @@ public class VtnMain extends MyJFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void mnuProductoConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProductoConsultaActionPerformed
-        // TODO add your handling code here:
+        clearPanels();
+        panelProductoConsulta=new PanelProductoConsulta(bd);
+        this.getContentPane().add(panelProductoConsulta);
+        pack();
     }//GEN-LAST:event_mnuProductoConsultaActionPerformed
 
     private void mnuListaBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuListaBajaActionPerformed
@@ -269,6 +273,10 @@ public class VtnMain extends MyJFrame {
 
         }try {
             this.remove(panelProductoBaja);
+        } catch (Exception ex) {
+
+        }try {
+            this.remove(panelProductoConsulta);
         } catch (Exception ex) {
 
         }
