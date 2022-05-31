@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Categoria;
+import model.Lista;
 import model.Producto;
 
 /**
@@ -195,4 +196,78 @@ public class OperacionesDAO {
 
         return categorias;
     }
+    
+    public int insertarLista(int codigo, String denominacion) {
+        String sql = "insert into tblLista values ('" + codigo + "','" + denominacion + "')";
+        Statement sentencia;
+        int resultado = -1;
+        if (!existeProducto(codigo)) {
+
+            try {
+                sentencia = bd.getConexion().createStatement();
+                resultado = sentencia.executeUpdate(sql);
+            } catch (SQLException ex) {
+                Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return resultado;
+    }
+
+    public int eliminarLista(int codigo) {
+        String sql = "delete from tblListas where codigo_Lista='" + codigo + "' ";
+        Statement sentencia;
+        int resultado = -1;
+
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return resultado;
+    }
+
+    private boolean existeLista(int codigo) {
+        boolean existe = false;
+        String sql = "select codigo_Lista from tblListas where codigo_Lista='" + codigo + "'";
+        Statement sentencia;
+        ResultSet resultado;
+
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeQuery(sql);
+            existe = resultado.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return existe;
+
+    }
+    
+    public ArrayList<Lista> getListas() {
+        ArrayList<Lista> categorias = new ArrayList<>();
+        String sql = "select codigo_producto, denominacion from tblListas";
+        Statement sentencia;
+        ResultSet resultado;
+
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeQuery(sql);
+
+            while (resultado.next()) {
+                categorias.add(new Lista(
+                        resultado.getInt("codigo_producto"),
+                         resultado.getString("denominacion")
+                        ));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return categorias;
+    }
+    
 }

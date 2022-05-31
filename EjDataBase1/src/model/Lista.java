@@ -6,12 +6,20 @@ package model;
 
 public class Lista {
 
-    int codigo;
-    String denominacion;
+    private int codigo;
+    private String denominacion;
 
     public Lista(int codigo, String denominacion) {
         this.codigo = codigo;
         this.denominacion = denominacion;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public String getDenominacion() {
+        return denominacion;
     }
     
     
