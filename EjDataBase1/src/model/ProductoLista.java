@@ -31,6 +31,10 @@ public class ProductoLista {
         return cantidad;
     }
 
+    public int getCodigoProducto(){
+        return producto.getCodigo();
+    }
+    
     public void sumCantidad(int cantidad) {
         this.cantidad += cantidad;
     }

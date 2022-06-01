@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Categoria;
 import model.Producto;
@@ -85,6 +86,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
         lblErrorLista1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         listEnLista = new javax.swing.JList<>();
+        lblErrorEnlistados = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Consolas", 1, 36)); // NOI18N
         jLabel1.setText("Alta Lista");
@@ -156,6 +158,8 @@ public class PanelListaAlta extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(listEnLista);
 
+        lblErrorEnlistados.setForeground(java.awt.Color.red);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -196,15 +200,18 @@ public class PanelListaAlta extends javax.swing.JPanel {
                                             .addComponent(btnCrear)
                                             .addComponent(btnAnnadir))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblErrorEnlistados, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(4, 4, 4)
-                                .addComponent(lblErrorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel4)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(33, 33, 33)
+                                        .addComponent(jLabel4))
+                                    .addComponent(lblErrorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -219,18 +226,21 @@ public class PanelListaAlta extends javax.swing.JPanel {
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblErrorDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(79, 79, 79)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblErrorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblErrorLista1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(jLabel4)
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblErrorDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblErrorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel2)
+                                .addComponent(lblErrorEnlistados, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
@@ -303,7 +313,6 @@ public class PanelListaAlta extends javax.swing.JPanel {
                 //Añade y elimine un elemento para que actualice la lista
                 listEnlistadosModel.insertElementAt(0, 0);
                 listEnlistadosModel.remove(0);
-
             }
 
         }
@@ -314,13 +323,20 @@ public class PanelListaAlta extends javax.swing.JPanel {
     }//GEN-LAST:event_btnBorrarProductoActionPerformed
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
-        int codigo;
+        int codigo=0;
         String denominacion = txtDenominacion.getText();
         boolean error = false;
 
         try {
             codigo = Integer.parseInt(txtCodigo.getText());
             lblErrorCodigo.setText("");
+            
+            if (operaciones.existeLista(codigo)) {
+                lblErrorCodigo.setText("Ya existe");
+                error=true;
+            }else{
+                lblErrorCodigo.setText("");
+            }
         } catch (NumberFormatException ex) {
             lblErrorCodigo.setText("*");
             error=true;
@@ -333,10 +349,23 @@ public class PanelListaAlta extends javax.swing.JPanel {
             lblErrorDenominacion.setText("");
         }
         
-        if (error) {
+        if (listEnlistadosModel.size()==0) {
+            lblErrorEnlistados.setText("Añade produtos a la lista");
+            error=true;
+        }else{
+            lblErrorEnlistados.setText("");
             
         }
-
+        
+        
+        if (!error) {
+            ArrayList<ProductoLista> lista=new ArrayList<>();
+            for (int i = 0; i < listEnlistadosModel.getSize(); i++) {
+                lista.add((ProductoLista)listEnlistadosModel.get(i));
+            }
+            operaciones.insertarLista(codigo, denominacion, lista);
+            JOptionPane.showMessageDialog(this, "Lista creada","Exito",JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnCrearActionPerformed
 
     private void cleanList() {
@@ -359,6 +388,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
     private javax.swing.JLabel lblErrorCantidad;
     private javax.swing.JLabel lblErrorCodigo;
     private javax.swing.JLabel lblErrorDenominacion;
+    private javax.swing.JLabel lblErrorEnlistados;
     private javax.swing.JLabel lblErrorLista1;
     private javax.swing.JList<String> listEnLista;
     private javax.swing.JList<String> listProductos;

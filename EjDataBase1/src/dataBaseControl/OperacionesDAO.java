@@ -10,9 +10,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import model.Categoria;
 import model.Lista;
 import model.Producto;
+import model.ProductoLista;
 
 /**
  *
@@ -21,8 +23,6 @@ import model.Producto;
 public class OperacionesDAO {
 
     Conexion bd;
-    
-    
 
     public OperacionesDAO(Conexion bd) {
         this.bd = bd;
@@ -91,7 +91,7 @@ public class OperacionesDAO {
             while (resultado.next()) {
                 categorias.add(new Categoria(
                         resultado.getInt("codigo_categoria"),
-                         resultado.getString("denominacion")));
+                        resultado.getString("denominacion")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,7 +100,6 @@ public class OperacionesDAO {
         return categorias;
     }
 
-    
     public int insertarProducto(int codigo, String denominacion, int codigo_categoria) {
         String sql = "insert into tblProductos values ('" + codigo + "','" + denominacion + "','" + codigo_categoria + "');";
         Statement sentencia;
@@ -150,7 +149,7 @@ public class OperacionesDAO {
         return existe;
 
     }
-    
+
     public ArrayList<Producto> getProductos() {
         ArrayList<Producto> categorias = new ArrayList<>();
         String sql = "select codigo_producto, denominacion, codigo_categoria from tblProductos";
@@ -164,8 +163,8 @@ public class OperacionesDAO {
             while (resultado.next()) {
                 categorias.add(new Producto(
                         resultado.getInt("codigo_producto"),
-                         resultado.getString("denominacion")
-                        ,resultado.getInt("codigo_categoria")));
+                        resultado.getString("denominacion"),
+                         resultado.getInt("codigo_categoria")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -173,10 +172,10 @@ public class OperacionesDAO {
 
         return categorias;
     }
-    
+
     public ArrayList<Producto> getProductos(int codigoCategoria) {
         ArrayList<Producto> categorias = new ArrayList<>();
-        String sql = "select codigo_producto, denominacion, codigo_categoria from tblProductos where codigo_categoria='"+codigoCategoria+"'";
+        String sql = "select codigo_producto, denominacion, codigo_categoria from tblProductos where codigo_categoria='" + codigoCategoria + "'";
         Statement sentencia;
         ResultSet resultado;
 
@@ -187,8 +186,8 @@ public class OperacionesDAO {
             while (resultado.next()) {
                 categorias.add(new Producto(
                         resultado.getInt("codigo_producto"),
-                         resultado.getString("denominacion")
-                        ,resultado.getInt("codigo_categoria")));
+                        resultado.getString("denominacion"),
+                         resultado.getInt("codigo_categoria")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -196,22 +195,43 @@ public class OperacionesDAO {
 
         return categorias;
     }
-    
-    public int insertarLista(int codigo, String denominacion) {
-        String sql = "insert into tblLista values ('" + codigo + "','" + denominacion + "')";
+
+    public int insertarLista(int codigo, String denominacion, ArrayList<ProductoLista> lista) {
+        String sql = "insert into tblListas values ('" + codigo + "','" + denominacion + "')";
+        //INSERT INTO tbllistas VALUES ('3', '3')
         Statement sentencia;
         int resultado = -1;
-        if (!existeProducto(codigo)) {
+        if (!existeLista(codigo)) {
 
+            try {
+                sentencia = bd.getConexion().createStatement();
+                resultado = sentencia.executeUpdate(sql);
+                insertarProductoEnLista(lista, codigo);
+            } catch (SQLException ex) {
+                Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return resultado;
+    }
+
+    private void insertarProductoEnLista(ArrayList<ProductoLista> lista, int codigo_lista) {
+        String sql;
+        Statement sentencia;
+        int resultado = -1;
+        for (ProductoLista i : lista) {
+            sql = "INSERT INTO `tbllistas_productos` (`codigo_lista`, `codigo_producto`, `cantidad`) VALUES ('" + codigo_lista + "', '" + i.getCodigoProducto() + "', '" + i.getCantidad() + "');";
             try {
                 sentencia = bd.getConexion().createStatement();
                 resultado = sentencia.executeUpdate(sql);
             } catch (SQLException ex) {
                 Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
+            if (resultado==-1) {
+                break;
+            }
         }
 
-        return resultado;
     }
 
     public int eliminarLista(int codigo) {
@@ -229,7 +249,12 @@ public class OperacionesDAO {
         return resultado;
     }
 
-    private boolean existeLista(int codigo) {
+    /**
+     * Comprueba ya existe la lista
+     * @param codigo
+     * @return 
+     */
+    public boolean existeLista(int codigo) {
         boolean existe = false;
         String sql = "select codigo_Lista from tblListas where codigo_Lista='" + codigo + "'";
         Statement sentencia;
@@ -246,7 +271,7 @@ public class OperacionesDAO {
         return existe;
 
     }
-    
+
     public ArrayList<Lista> getListas() {
         ArrayList<Lista> categorias = new ArrayList<>();
         String sql = "select codigo_producto, denominacion from tblListas";
@@ -260,8 +285,8 @@ public class OperacionesDAO {
             while (resultado.next()) {
                 categorias.add(new Lista(
                         resultado.getInt("codigo_producto"),
-                         resultado.getString("denominacion")
-                        ));
+                        resultado.getString("denominacion")
+                ));
             }
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -269,5 +294,5 @@ public class OperacionesDAO {
 
         return categorias;
     }
-    
+
 }
