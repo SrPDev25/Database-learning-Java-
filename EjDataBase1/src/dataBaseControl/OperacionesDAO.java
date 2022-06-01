@@ -274,7 +274,7 @@ public class OperacionesDAO {
 
     public ArrayList<Lista> getListas() {
         ArrayList<Lista> categorias = new ArrayList<>();
-        String sql = "select codigo_producto, denominacion from tblListas";
+        String sql = "select codigo_lista, denominacion from tblListas";
         Statement sentencia;
         ResultSet resultado;
 
@@ -284,7 +284,7 @@ public class OperacionesDAO {
 
             while (resultado.next()) {
                 categorias.add(new Lista(
-                        resultado.getInt("codigo_producto"),
+                        resultado.getInt("codigo_lista"),
                         resultado.getString("denominacion")
                 ));
             }

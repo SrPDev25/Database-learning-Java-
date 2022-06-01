@@ -24,6 +24,8 @@ public class VtnMain extends MyJFrame {
     PanelProductoBaja panelProductoBaja;
     PanelProductoConsulta panelProductoConsulta;
     PanelListaAlta panelListaAlta;
+    PanelListaBaja panelListaBaja;
+    
     
     public VtnMain() {
         initComponents();
@@ -180,7 +182,10 @@ public class VtnMain extends MyJFrame {
     }//GEN-LAST:event_mnuProductoConsultaActionPerformed
 
     private void mnuListaBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuListaBajaActionPerformed
-        // TODO add your handling code here:
+        clearPanels();
+        panelListaBaja=new PanelListaBaja(bd);
+        this.getContentPane().add(panelListaBaja);
+        pack();
     }//GEN-LAST:event_mnuListaBajaActionPerformed
 
     private void mnuCategoriaAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCategoriaAltaActionPerformed
@@ -295,6 +300,10 @@ public class VtnMain extends MyJFrame {
         }
         try {
             this.remove(panelListaAlta);
+        } catch (Exception ex) {
+
+        }try {
+            this.remove(panelListaBaja);
         } catch (Exception ex) {
 
         }

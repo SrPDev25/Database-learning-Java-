@@ -21,6 +21,11 @@ public class Lista {
     public String getDenominacion() {
         return denominacion;
     }
+
+    @Override
+    public String toString() {
+        return denominacion;
+    }
     
     
     

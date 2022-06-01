@@ -8,7 +8,6 @@ import dataBaseControl.Conexion;
 import dataBaseControl.OperacionesDAO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import model.Categoria;
 import model.Lista;
 
 /**
@@ -35,7 +34,7 @@ public class PanelListaBaja extends javax.swing.JPanel {
     }
     
     private void cargarListas(){
-        comboModel.addElement("Seleciona Producto");
+        comboModel.addElement("Seleciona lista");
         comboModel.addAll(operaciones.getListas());
     }
 
@@ -107,17 +106,12 @@ public class PanelListaBaja extends javax.swing.JPanel {
         int seleccionado=combo.getSelectedIndex();
         if(seleccionado!=0){
             Lista lista=(Lista)(comboModel.getSelectedItem());
-            //Comprueba que la categoria no tenga ningun producto
-            if (operaciones.getProductos(lista.getCodigo()).isEmpty()) {
             operaciones.eliminarLista(lista.getCodigo());
             comboModel.removeElement(lista);
             JOptionPane.showMessageDialog(this, "Eliminado correctamente"
                     , "Eliminado", JOptionPane.INFORMATION_MESSAGE);
-            }else{
-                lblError.setText("Tiene productos asociados a esta categoria");
-            }
         }else
-            lblError.setText("No se seleccionó ninguna categoria");
+            lblError.setText("No se seleccionó ninguna lista");
     }//GEN-LAST:event_btnEliminarActionPerformed
 
 
