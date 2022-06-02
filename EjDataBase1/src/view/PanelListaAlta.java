@@ -56,6 +56,13 @@ public class PanelListaAlta extends javax.swing.JPanel {
         comboModel.addAll(operaciones.getCategorias());
     }
 
+    private void clean() {
+        listEnlistadosModel.removeAllElements();
+        txtCantidad.setText("");
+        txtCodigo.setText("");
+        txtDenominacion.setText("");
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -127,6 +134,11 @@ public class PanelListaAlta extends javax.swing.JPanel {
 
         btnCancelar.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         lblErrorCantidad.setForeground(java.awt.Color.red);
 
@@ -288,9 +300,14 @@ public class PanelListaAlta extends javax.swing.JPanel {
         try {
             cantidad = Integer.parseInt(txtCantidad.getText());
             lblErrorCantidad.setText("");
+
+            if (cantidad < 1) {
+                lblErrorCantidad.setText("*");
+                error = true;
+            }
         } catch (Exception ex) {
-            lblErrorCantidad.setText("*");
-            error = true;
+                lblErrorCantidad.setText("*");
+                error = true;
         }
 
         if (pos < 0) {
@@ -323,50 +340,54 @@ public class PanelListaAlta extends javax.swing.JPanel {
     }//GEN-LAST:event_btnBorrarProductoActionPerformed
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
-        int codigo=0;
+        int codigo = 0;
         String denominacion = txtDenominacion.getText();
         boolean error = false;
 
         try {
             codigo = Integer.parseInt(txtCodigo.getText());
             lblErrorCodigo.setText("");
-            
+
             if (operaciones.existeLista(codigo)) {
                 lblErrorCodigo.setText("Ya existe");
-                error=true;
-            }else{
+                error = true;
+            } else {
                 lblErrorCodigo.setText("");
             }
         } catch (NumberFormatException ex) {
             lblErrorCodigo.setText("*");
-            error=true;
+            error = true;
         }
-        
+
         if (denominacion.isBlank()) {
             lblErrorDenominacion.setText("*");
-            error=true;
-        }else{
+            error = true;
+        } else {
             lblErrorDenominacion.setText("");
         }
-        
-        if (listEnlistadosModel.size()==0) {
+
+        if (listEnlistadosModel.size() == 0) {
             lblErrorEnlistados.setText("Añade produtos a la lista");
-            error=true;
-        }else{
+            error = true;
+        } else {
             lblErrorEnlistados.setText("");
-            
+
         }
-        
-        
+
         if (!error) {
-            ArrayList<ProductoLista> lista=new ArrayList<>();
+            ArrayList<ProductoLista> lista = new ArrayList<>();
             for (int i = 0; i < listEnlistadosModel.getSize(); i++) {
-                lista.add((ProductoLista)listEnlistadosModel.get(i));
+                lista.add((ProductoLista) listEnlistadosModel.get(i));
             }
             operaciones.insertarLista(codigo, denominacion, lista);
-            JOptionPane.showMessageDialog(this, "Lista creada","Exito",JOptionPane.INFORMATION_MESSAGE);
+            clean();
+            JOptionPane.showMessageDialog(this, "Lista creada", "Exito", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnCrearActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        clean();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void cleanList() {
         listOpcionesModel.removeAllElements();

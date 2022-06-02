@@ -25,6 +25,7 @@ public class VtnMain extends MyJFrame {
     PanelProductoConsulta panelProductoConsulta;
     PanelListaAlta panelListaAlta;
     PanelListaBaja panelListaBaja;
+    PanelListaConsulta panelListaConsulta;
     
     
     public VtnMain() {
@@ -161,6 +162,11 @@ public class VtnMain extends MyJFrame {
         jMenu3.add(mnuListaBaja);
 
         mnuListaConsulta.setText("Consulta");
+        mnuListaConsulta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuListaConsultaActionPerformed(evt);
+            }
+        });
         jMenu3.add(mnuListaConsulta);
 
         jMenuBar1.add(jMenu3);
@@ -234,6 +240,13 @@ public class VtnMain extends MyJFrame {
         pack();
     }//GEN-LAST:event_mnuListaAltaActionPerformed
 
+    private void mnuListaConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuListaConsultaActionPerformed
+        clearPanels();
+        panelListaConsulta=new PanelListaConsulta(bd);
+        this.getContentPane().add(panelListaConsulta);
+        pack();
+    }//GEN-LAST:event_mnuListaConsultaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -304,6 +317,11 @@ public class VtnMain extends MyJFrame {
 
         }try {
             this.remove(panelListaBaja);
+        } catch (Exception ex) {
+
+        }
+        try {
+            this.remove(panelListaConsulta);
         } catch (Exception ex) {
 
         }
