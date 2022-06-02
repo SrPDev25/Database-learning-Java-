@@ -235,7 +235,7 @@ public class OperacionesDAO {
     }
 
     public int eliminarLista(int codigo) {
-        String sql = "delete from tblListas where codigo_Lista='" + codigo + "' ";
+        String sql = "DELETE FROM `tbllistas` WHERE (`codigo_lista` = '"+codigo+"');";
         Statement sentencia;
         int resultado = -1;
 
@@ -293,6 +293,29 @@ public class OperacionesDAO {
         }
 
         return categorias;
+    }
+    
+    public ArrayList<ProductoLista> getProductosLista(int codigo){
+        ArrayList<ProductoLista> listaProductos=new ArrayList();
+        String sql="SELECT  codigo_producto, cantidad FROM tbllistas_productos where codigo_lista='"+codigo+"' ";
+        Statement sentencia;
+        ResultSet resultado;
+        
+        try {
+            sentencia=bd.getConexion().createStatement();
+            resultado=sentencia.executeQuery(sql);
+            
+            while(resultado.next()){
+//                listaProductos.add(new ProductoLista(resultado.getInt("codigo_producto")
+ //                      , resultado.getInt("cantidad")));
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return listaProductos;
     }
 
 }

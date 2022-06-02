@@ -19,26 +19,24 @@ public class PanelListaBaja extends javax.swing.JPanel {
     Conexion bd;
     OperacionesDAO operaciones;
     DefaultComboBoxModel comboModel;
-    
-    
+
     public PanelListaBaja(Conexion bd) {
         initComponents();
-        this.bd=bd;
-        operaciones=new OperacionesDAO(bd);
-        
-        comboModel=new DefaultComboBoxModel();
-        
+        this.bd = bd;
+        operaciones = new OperacionesDAO(bd);
+
+        comboModel = new DefaultComboBoxModel();
+
         combo.setModel(comboModel);
-        
+
         cargarListas();
     }
-    
-    private void cargarListas(){
+
+    private void cargarListas() {
         comboModel.addElement("Seleciona lista");
         comboModel.addAll(operaciones.getListas());
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,14 +101,17 @@ public class PanelListaBaja extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int seleccionado=combo.getSelectedIndex();
-        if(seleccionado!=0){
-            Lista lista=(Lista)(comboModel.getSelectedItem());
-            operaciones.eliminarLista(lista.getCodigo());
-            comboModel.removeElement(lista);
-            JOptionPane.showMessageDialog(this, "Eliminado correctamente"
-                    , "Eliminado", JOptionPane.INFORMATION_MESSAGE);
-        }else
+        int seleccionado = combo.getSelectedIndex();
+        if (seleccionado != 0) {
+            Lista lista = (Lista) (comboModel.getSelectedItem());
+            if (operaciones.eliminarLista(lista.getCodigo()) == -1) {
+                JOptionPane.showMessageDialog(this, "No se eliminó la lista", "Error", JOptionPane.WARNING_MESSAGE);
+            } else {
+                comboModel.removeElement(lista);
+                JOptionPane.showMessageDialog(this, "Eliminado correctamente",
+                         "Eliminado", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else
             lblError.setText("No se seleccionó ninguna lista");
     }//GEN-LAST:event_btnEliminarActionPerformed
 
