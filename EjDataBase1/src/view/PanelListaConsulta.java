@@ -11,7 +11,6 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import model.Categoria;
 import model.Lista;
@@ -268,7 +267,7 @@ public class PanelListaConsulta extends javax.swing.JPanel {
         } else {
             Vector v = new Vector();
             v.add(productoAnnadir);
-            v.add(0);
+            v.add(""+0);
             tblConsultaModel.addRow(v);
         }
     }//GEN-LAST:event_btnAnnadirActionPerformed
@@ -285,7 +284,7 @@ public class PanelListaConsulta extends javax.swing.JPanel {
             for (ProductoLista i : productos) {
                 Vector v = new Vector();
                 v.add(i.getProducto());
-                v.add(i.getCantidad());
+                v.add(""+i.getCantidad());//es necesario insertar un String
                 tblConsultaModel.addRow(v);
             }
         }
@@ -301,20 +300,22 @@ public class PanelListaConsulta extends javax.swing.JPanel {
 
     private void btnAplicarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarCambiosActionPerformed
         ArrayList<ProductoLista> newProductos = new ArrayList();
+        Integer n;
         Lista lista;
 
         if (comboLista.getSelectedIndex() != 0) {
             lista = (Lista) comboListaModel.getElementAt(comboLista.getSelectedIndex());
             for (int i = 0; i < tblConsulta.getRowCount(); i++) {
-                int n=(int) tblConsultaModel.getValueAt(i, 1);
+                n=Integer.parseInt((String)tblConsultaModel.getValueAt(i, 1)) ;
                 newProductos.add(new ProductoLista((Producto) tblConsultaModel.getValueAt(i, 0),
-                         i));
+                         n));
             }
 
             //Si los productos no siguen igual se producirá el update
-            if (!newProductos.equals(operaciones.getProductosLista(lista.getCodigo()))) {
+            //if (!newProductos.equals(operaciones.getProductosLista(lista.getCodigo()))) {
                 operaciones.actualizarLista(newProductos, lista.getCodigo());
-            }
+            //}
+            
 
         }
 
