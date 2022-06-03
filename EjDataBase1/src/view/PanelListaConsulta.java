@@ -306,13 +306,14 @@ public class PanelListaConsulta extends javax.swing.JPanel {
         if (comboLista.getSelectedIndex() != 0) {
             lista = (Lista) comboListaModel.getElementAt(comboLista.getSelectedIndex());
             for (int i = 0; i < tblConsulta.getRowCount(); i++) {
+                int n=(int) tblConsultaModel.getValueAt(i, 1);
                 newProductos.add(new ProductoLista((Producto) tblConsultaModel.getValueAt(i, 0),
-                         (int) tblConsultaModel.getValueAt(i, 1)));
+                         i));
             }
 
             //Si los productos no siguen igual se producirá el update
             if (!newProductos.equals(operaciones.getProductosLista(lista.getCodigo()))) {
-
+                operaciones.actualizarLista(newProductos, lista.getCodigo());
             }
 
         }

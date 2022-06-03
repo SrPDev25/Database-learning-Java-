@@ -324,6 +324,52 @@ public class OperacionesDAO {
         return listaProductos;
     }
 
+    public int actualizarLista(ArrayList<ProductoLista> productos, int lista){
+        int resultado=0;
+        String sql;
+        try {
+            Statement sentencia=bd.getConexion().createStatement();
+            for(ProductoLista p: productos){
+                //Si no existe el producto en esta lista, lo inserta 
+                if (!existeProductoLista(p, lista)) {
+                    sql="INSERT INTO `tbllistas_productos` "
+                            + "(`codigo_lista`, `codigo_producto`, `cantidad`) "
+                            + "VALUES ('"+lista+"', '"+p.getCodigoProducto()+"'"
+                            + ", '"+p.getCantidad()+"');";
+                    sentencia.executeUpdate(sql);
+                //Si ya existe ejecutamos un update de la cantidad
+                }else{
+                    sql="UPDATE `tbllistas_productos` SET `cantidad`='"+p.getCantidad()+
+                            "' WHERE `codigo_lista`='"+lista+"' and`codigo_producto`='"+p.getCodigoProducto()+"'";
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return resultado;
+    }
     
+    
+    /**
+     * Comprueba si un producto ya existe en una lista
+     * @param comprobacion
+     * @param lista
+     * @return 
+     */
+    private boolean existeProductoLista(ProductoLista comprobacion, int lista){
+        String sql="select count(*) from tblListas_Productos where codigo_lista='"+lista+"' and codigo_producto='"+comprobacion.getCodigoProducto()+"'";
+        boolean existe=false;
+        try {
+            Statement sentencia=bd.getConexion().createStatement();
+            ResultSet resultado=sentencia.executeQuery(sql);
+            existe=resultado.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return existe;
+    }
     
 }
