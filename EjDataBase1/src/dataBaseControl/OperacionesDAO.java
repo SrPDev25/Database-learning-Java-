@@ -297,7 +297,11 @@ public class OperacionesDAO {
     
     public ArrayList<ProductoLista> getProductosLista(int codigo){
         ArrayList<ProductoLista> listaProductos=new ArrayList();
-        String sql="SELECT  codigo_producto, cantidad FROM tbllistas_productos where codigo_lista='"+codigo+"' ";
+        //Consulta que coge de la tabla productos y listas_producto
+        String sql="select p.codigo_producto, denominacion , cantidad " +
+                        "from tblListas_productos lp, tblProductos p " +
+                        "where lp.codigo_producto = p.codigo_producto "
+                        + "and lp.codigo_lista='"+codigo+"'";
         Statement sentencia;
         ResultSet resultado;
         
@@ -306,8 +310,10 @@ public class OperacionesDAO {
             resultado=sentencia.executeQuery(sql);
             
             while(resultado.next()){
-//                listaProductos.add(new ProductoLista(resultado.getInt("codigo_producto")
- //                      , resultado.getInt("cantidad")));
+               listaProductos.add(new ProductoLista(new Producto(
+                       resultado.getInt("p.codigo_producto")
+                       ,resultado.getString("denominacion") )
+                       , resultado.getInt("cantidad")));
             }
             
         } catch (SQLException ex) {
@@ -318,4 +324,6 @@ public class OperacionesDAO {
         return listaProductos;
     }
 
+    
+    
 }

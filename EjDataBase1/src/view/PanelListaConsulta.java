@@ -7,8 +7,11 @@ package view;
 import dataBaseControl.Conexion;
 import dataBaseControl.OperacionesDAO;
 import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import model.Categoria;
 import model.Lista;
@@ -26,8 +29,8 @@ public class PanelListaConsulta extends javax.swing.JPanel {
     DefaultComboBoxModel comboCategoriaModel;
     DefaultComboBoxModel comboListaModel;
     DefaultListModel listOpcionesModel;
-    DefaultTableModel tableConsultaModel;
-    
+    DefaultTableModel tblConsultaModel;
+
     public PanelListaConsulta(Conexion bd) {
         initComponents();
         this.bd = bd;
@@ -35,15 +38,26 @@ public class PanelListaConsulta extends javax.swing.JPanel {
 
         comboCategoriaModel = new DefaultComboBoxModel();
         comboProductos.setModel(comboCategoriaModel);
-        comboListaModel = new DefaultComboBoxModel ();
+        comboListaModel = new DefaultComboBoxModel();
         comboLista.setModel(comboListaModel);
         listOpcionesModel = new DefaultListModel();
         listProductos.setModel(listOpcionesModel);
-        tableConsultaModel=new DefaultTableModel();
-        tblConsulta.setModel(tableConsultaModel);
-        tableConsultaModel.setColumnIdentifiers(new String[]{"Producto","Cantidad"});
+        tblConsultaModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if (column == 0) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+        };
+        tblConsulta.setModel(tblConsultaModel);
+        tblConsultaModel.setColumnIdentifiers(new String[]{"Producto", "Cantidad"});
         cargarCategorias();
         cargarListas();
+
     }
 
     private void cargarProductos() {
@@ -58,11 +72,35 @@ public class PanelListaConsulta extends javax.swing.JPanel {
         comboCategoriaModel.addElement("Seleciona categoria");
         comboCategoriaModel.addAll(operaciones.getCategorias());
     }
-    
-    private void cargarListas(){
+
+    private void cargarListas() {
         comboListaModel.addElement("Elige una lista");
         comboListaModel.addAll(operaciones.getListas());
     }
+
+    /**
+     * Comprueba si exista ya un producto en la tabla
+     *
+     * @param productoAnnadir
+     * @return devuelve -1 si no existe o la posicion en la tabla si ya existe
+     */
+    private int productoEnLista(Producto productoAnnadir) {
+        ArrayList<Producto> productosEnlistados = new ArrayList();
+        int pos = -1;
+
+        for (int i = 0; i < tblConsultaModel.getRowCount(); i++) {
+            productosEnlistados.add((Producto) tblConsultaModel.getValueAt(i, 0));
+        }
+        pos = productosEnlistados.indexOf(productoAnnadir);
+        return pos;
+    }
+
+    private void cleanTable() {
+        while (tblConsulta.getRowCount() != 0) {
+            tblConsultaModel.removeRow(0);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,9 +117,9 @@ public class PanelListaConsulta extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         listProductos = new javax.swing.JList<>();
         comboProductos = new javax.swing.JComboBox<>();
-        txtCantidad = new javax.swing.JTextField();
         btnAnnadir = new javax.swing.JButton();
-        lblErrorCantidad = new javax.swing.JLabel();
+        btnEliminarProducto = new javax.swing.JButton();
+        btnAplicarCambios = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Consolas", 1, 36)); // NOI18N
         jLabel1.setText("CONSULTA LISTA");
@@ -132,7 +170,19 @@ public class PanelListaConsulta extends javax.swing.JPanel {
             }
         });
 
-        lblErrorCantidad.setForeground(java.awt.Color.red);
+        btnEliminarProducto.setText("Eliminar");
+        btnEliminarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProductoActionPerformed(evt);
+            }
+        });
+
+        btnAplicarCambios.setText("Aplicar cambios");
+        btnAplicarCambios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAplicarCambiosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -151,20 +201,22 @@ public class PanelListaConsulta extends javax.swing.JPanel {
                 .addGap(14, 14, 14)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(comboProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(comboProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(btnAplicarCambios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnEliminarProducto)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnAnnadir, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(19, 19, 19)))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAnnadir, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblErrorCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(44, 44, 44)))
-                .addGap(18, 18, 18))
+                        .addGap(33, 33, 33))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,19 +226,19 @@ public class PanelListaConsulta extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comboLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(comboProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblErrorCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAplicarCambios)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAnnadir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnEliminarProducto)
+                            .addComponent(btnAnnadir, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -195,6 +247,8 @@ public class PanelListaConsulta extends javax.swing.JPanel {
     }//GEN-LAST:event_comboProductosMouseClicked
 
     private void comboProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboProductosActionPerformed
+
+        listOpcionesModel.removeAllElements();
         if (comboProductos.getSelectedIndex() != 0) {
             Categoria categoria = (Categoria) comboCategoriaModel.getElementAt(comboProductos.getSelectedIndex());
             cargarProductos(categoria.getCodigo());
@@ -204,61 +258,78 @@ public class PanelListaConsulta extends javax.swing.JPanel {
     }//GEN-LAST:event_comboProductosActionPerformed
 
     private void btnAnnadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnnadirActionPerformed
-        int cantidad = 0;
-        int pos = listProductos.getSelectedIndex();
-        boolean error = false;
-        Producto producto;
-        ProductoLista productoEnlistado;
-
-        try {
-            cantidad = Integer.parseInt(txtCantidad.getText());
-            lblErrorCantidad.setText("");
-        } catch (Exception ex) {
-            lblErrorCantidad.setText("*");
-            error = true;
-        }
-
-        if (pos < 0) {
-            error = true;
+        Producto productoAnnadir = (Producto) listOpcionesModel.get(
+                listProductos.getSelectedIndex());
+        int pos = productoEnLista(productoAnnadir);
+        if (pos != -1) {
+            JOptionPane.showMessageDialog(this, "Producto ya en la lista", "Error", JOptionPane.WARNING_MESSAGE);
+        } else if (comboLista.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this, "No hay lista seleccionada", "Error", JOptionPane.WARNING_MESSAGE);
         } else {
-        }
-
-        if (!error) {//Si no hay ningun error se mueve el producto
-            producto = (Producto) listOpcionesModel.getElementAt(pos);//Se obtiene el producto seleccionado
-            productoEnlistado = new ProductoLista(producto, cantidad);//Se usa una clase para relacionar el producto con la cantidad
-            
-//            int posInModel = listEnlistadosModel.indexOf(productoEnlistado);//Se obtiene la posicion de este producto en la lista 2
-//            if (posInModel == -1) {
-//                listEnlistadosModel.addElement(productoEnlistado);
-//            } else {
-//                ProductoLista newAmount = (ProductoLista) (listEnlistadosModel.get(posInModel));
-//                newAmount.sumCantidad(cantidad);
-//                //Añade y elimine un elemento para que actualice la lista
-//                listEnlistadosModel.insertElementAt(0, 0);
-//                listEnlistadosModel.remove(0);
-//            }
-
+            Vector v = new Vector();
+            v.add(productoAnnadir);
+            v.add(0);
+            tblConsultaModel.addRow(v);
         }
     }//GEN-LAST:event_btnAnnadirActionPerformed
 
     private void comboListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboListaActionPerformed
-        Lista lista = (Lista) comboListaModel.getElementAt(
-                comboLista.getSelectedIndex());
-        ArrayList <ProductoLista> productos;
-        
+        cleanTable();
+        Lista lista;
+        ArrayList<ProductoLista> productos;
+
+        if (comboLista.getSelectedIndex() != 0) {
+            lista = (Lista) comboListaModel.getElementAt(
+                    comboLista.getSelectedIndex());
+            productos = operaciones.getProductosLista(lista.getCodigo());
+            for (ProductoLista i : productos) {
+                Vector v = new Vector();
+                v.add(i.getProducto());
+                v.add(i.getCantidad());
+                tblConsultaModel.addRow(v);
+            }
+        }
+
     }//GEN-LAST:event_comboListaActionPerformed
+
+    private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
+        int pos = tblConsulta.getSelectedRow();
+        if (pos >= 0) {
+            tblConsultaModel.removeRow(pos);
+        }
+    }//GEN-LAST:event_btnEliminarProductoActionPerformed
+
+    private void btnAplicarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarCambiosActionPerformed
+        ArrayList<ProductoLista> newProductos = new ArrayList();
+        Lista lista;
+
+        if (comboLista.getSelectedIndex() != 0) {
+            lista = (Lista) comboListaModel.getElementAt(comboLista.getSelectedIndex());
+            for (int i = 0; i < tblConsulta.getRowCount(); i++) {
+                newProductos.add(new ProductoLista((Producto) tblConsultaModel.getValueAt(i, 0),
+                         (int) tblConsultaModel.getValueAt(i, 1)));
+            }
+
+            //Si los productos no siguen igual se producirá el update
+            if (!newProductos.equals(operaciones.getProductosLista(lista.getCodigo()))) {
+
+            }
+
+        }
+
+    }//GEN-LAST:event_btnAplicarCambiosActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnnadir;
+    private javax.swing.JButton btnAplicarCambios;
+    private javax.swing.JButton btnEliminarProducto;
     private javax.swing.JComboBox<String> comboLista;
     private javax.swing.JComboBox<String> comboProductos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblErrorCantidad;
     private javax.swing.JList<String> listProductos;
     private javax.swing.JTable tblConsulta;
-    private javax.swing.JTextField txtCantidad;
     // End of variables declaration//GEN-END:variables
 }

@@ -17,6 +17,13 @@ public class Producto {
         this.codigo_categoria = codigo_categoria;
     }
 
+    public Producto(int codigo, String denominacion) {
+        this.codigo = codigo;
+        this.denominacion = denominacion;
+    }
+    
+    
+
     public int getCodigo() {
         return codigo;
     }
@@ -29,6 +36,33 @@ public class Producto {
         return codigo_categoria;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79 * hash + this.codigo;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Producto other = (Producto) obj;
+        if (this.codigo != other.codigo) {
+            return false;
+        }
+        return true;
+    }
+
+    
+    
     @Override
     public String toString() {
         return codigo +" "+  denominacion ;
