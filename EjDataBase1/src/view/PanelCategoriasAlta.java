@@ -23,10 +23,9 @@ public class PanelCategoriasAlta extends javax.swing.JPanel {
         this.bd = bd;
         operaciones = new OperacionesDAO(bd);
 
-       
     }
-    
-    private void borrarTxt(){
+
+    private void borrarTxt() {
         txtCodigo.setText("");
         txtDenominacion.setText("");
     }
@@ -66,8 +65,8 @@ public class PanelCategoriasAlta extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        jLabel3.setText("Alta");
+        jLabel3.setFont(new java.awt.Font("Consolas", 1, 36)); // NOI18N
+        jLabel3.setText("ALTA CATEGORÍA");
 
         btnAlta.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnAlta.setText("Dar de alta");
@@ -95,12 +94,6 @@ public class PanelCategoriasAlta extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAlta)
-                .addGap(20, 20, 20))
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -111,16 +104,23 @@ public class PanelCategoriasAlta extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(lblErrorDenominacion, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                        .addComponent(lblErrorDenominacion, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblErrorCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(140, 140, 140)
-                .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAlta)
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(62, 62, 62))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,7 +138,7 @@ public class PanelCategoriasAlta extends javax.swing.JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblErrorDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAlta)
                     .addComponent(btnCancelar))
@@ -149,18 +149,24 @@ public class PanelCategoriasAlta extends javax.swing.JPanel {
     private void btnAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaActionPerformed
         //int codigo=Integer.parseInt(txtCodigo.getText());
         String codigo = txtCodigo.getText();
-        int codigoInt;
+        int codigoInt=0;
         String denominacion = txtDenominacion.getText();
         boolean error = false;
 
         //comprueba si los campos estan en blanco
-        if (codigo.isBlank()) {
+        try {//Comprueba que se introdujo un numero
+            codigoInt = Integer.parseInt(codigo);
+            if (codigoInt<0) {
+                lblErrorCodigo.setText("Introduzca un número positivo");
+                error = true;
+            }else{
+                lblErrorCodigo.setText("");
+            }
+        } catch (NumberFormatException ex) {
+            lblErrorCodigo.setText("No se introdujo numero");
             error = true;
-            lblErrorCodigo.setText("*");
-        } else {
-            lblErrorCodigo.setText("");
-
         }
+
         if (denominacion.isBlank()) {
             error = true;
             lblErrorDenominacion.setText("*");
@@ -169,18 +175,12 @@ public class PanelCategoriasAlta extends javax.swing.JPanel {
         }
 
         if (!error) {
-            try {//Comprueba que se introdujo un numero
-                codigoInt = Integer.parseInt(codigo);
-                if (operaciones.insertarCategoria(codigoInt, denominacion) == -1) {
-                    lblErrorCodigo.setText("Codigo ya utilizado");
-                    
-                }else{
-                    borrarTxt();
-                    JOptionPane.showMessageDialog(this, "Categoria creada", "Creado",JOptionPane.INFORMATION_MESSAGE);
-                }
-                
-            } catch (NumberFormatException ex) {
-                lblErrorCodigo.setText("No se introdujo numero");
+            if (operaciones.insertarCategoria(codigoInt, denominacion) == -1) {
+                lblErrorCodigo.setText("Codigo ya utilizado");
+
+            } else {
+                borrarTxt();
+                JOptionPane.showMessageDialog(this, "Categoria creada", "Creado", JOptionPane.INFORMATION_MESSAGE);
             }
 
         }

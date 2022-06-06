@@ -79,7 +79,7 @@ public class PanelProductoAlta extends javax.swing.JPanel {
         });
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        jLabel3.setText("Alta");
+        jLabel3.setText("Alta producto");
 
         btnAlta.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnAlta.setText("Dar de alta");
@@ -136,14 +136,15 @@ public class PanelProductoAlta extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblErrorCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(140, 140, 140)
-                            .addComponent(jLabel3))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(98, 98, 98)
-                            .addComponent(comboCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(98, 98, 98)
+                        .addComponent(comboCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(57, 57, 57)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addGap(72, 72, 72))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,19 +177,25 @@ public class PanelProductoAlta extends javax.swing.JPanel {
     private void btnAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaActionPerformed
         //int codigo=Integer.parseInt(txtCodigo.getText());
         String codigo = txtCodigo.getText();
-        int codigoInt;
+        int codigoInt = 0;
         String denominacion = txtDenominacion.getText();
         boolean error = false;
         Categoria categoriaSeleccionada = null;
 
         //comprueba si los campos estan en blanco
-        if (codigo.isBlank()) {
+        try {//Comprueba que se introdujo un numero
+            codigoInt = Integer.parseInt(codigo);
+            if (codigoInt < 0) {
+                lblErrorCodigo.setText("Introduzca un número positivo");
+                error = true;
+            } else {
+                lblErrorCodigo.setText("");
+            }
+        } catch (NumberFormatException ex) {
+            lblErrorCodigo.setText("No se introdujo numero");
             error = true;
-            lblErrorCodigo.setText("*");
-        } else {
-            lblErrorCodigo.setText("");
-
         }
+
         if (denominacion.isBlank()) {
             error = true;
             lblErrorDenominacion.setText("*");
@@ -206,19 +213,14 @@ public class PanelProductoAlta extends javax.swing.JPanel {
         }
 
         if (!error) {
-            try {//Comprueba que se introdujo un numero
-                codigoInt = Integer.parseInt(codigo);
-                if (operaciones.insertarProducto(codigoInt, denominacion,
-                        categoriaSeleccionada.getCodigo()) == -1) {
-                    lblErrorCodigo.setText("Codigo ya utilizado");
 
-                } else {
-                    borrarTxt();
-                    JOptionPane.showMessageDialog(this, "Categoria creada", "Creado", JOptionPane.INFORMATION_MESSAGE);
-                }
+            if (operaciones.insertarProducto(codigoInt, denominacion,
+                    categoriaSeleccionada.getCodigo()) == -1) {
+                lblErrorCodigo.setText("Codigo ya utilizado");
 
-            } catch (NumberFormatException ex) {
-                lblErrorCodigo.setText("No se introdujo numero");
+            } else {
+                borrarTxt();
+                JOptionPane.showMessageDialog(this, "Categoria creada", "Creado", JOptionPane.INFORMATION_MESSAGE);
             }
 
         }
