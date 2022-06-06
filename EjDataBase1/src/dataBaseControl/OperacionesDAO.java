@@ -37,6 +37,7 @@ public class OperacionesDAO {
             try {
                 sentencia = bd.getConexion().createStatement();
                 resultado = sentencia.executeUpdate(sql);
+                sentencia.close();
             } catch (SQLException ex) {
                 Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -53,6 +54,7 @@ public class OperacionesDAO {
         try {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeUpdate(sql);
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -70,6 +72,8 @@ public class OperacionesDAO {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeQuery(sql);
             existe = resultado.next();
+            resultado.close();
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -93,6 +97,8 @@ public class OperacionesDAO {
                         resultado.getInt("codigo_categoria"),
                         resultado.getString("denominacion")));
             }
+            resultado.close();
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -109,6 +115,7 @@ public class OperacionesDAO {
             try {
                 sentencia = bd.getConexion().createStatement();
                 resultado = sentencia.executeUpdate(sql);
+            sentencia.close();
             } catch (SQLException ex) {
                 Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -125,6 +132,7 @@ public class OperacionesDAO {
         try {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeUpdate(sql);
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -142,6 +150,8 @@ public class OperacionesDAO {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeQuery(sql);
             existe = resultado.next();
+            resultado.close();
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -166,6 +176,8 @@ public class OperacionesDAO {
                         resultado.getString("denominacion"),
                          resultado.getInt("codigo_categoria")));
             }
+            resultado.close();
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -189,6 +201,8 @@ public class OperacionesDAO {
                         resultado.getString("denominacion"),
                          resultado.getInt("codigo_categoria")));
             }
+            resultado.close();
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -207,6 +221,7 @@ public class OperacionesDAO {
                 sentencia = bd.getConexion().createStatement();
                 resultado = sentencia.executeUpdate(sql);
                 insertarProductoEnLista(lista, codigo);
+            sentencia.close();
             } catch (SQLException ex) {
                 Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -242,6 +257,7 @@ public class OperacionesDAO {
         try {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeUpdate(sql);
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -264,6 +280,8 @@ public class OperacionesDAO {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeQuery(sql);
             existe = resultado.next();
+            resultado.close();
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -288,6 +306,8 @@ public class OperacionesDAO {
                         resultado.getString("denominacion")
                 ));
             }
+            resultado.close();
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -315,7 +335,8 @@ public class OperacionesDAO {
                        ,resultado.getString("denominacion") )
                        , resultado.getInt("cantidad")));
             }
-            
+            resultado.close();
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -354,6 +375,7 @@ public class OperacionesDAO {
                     sentencia.executeUpdate(sql);
                 }
             }
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -376,6 +398,8 @@ public class OperacionesDAO {
             Statement sentencia=bd.getConexion().createStatement();
             ResultSet resultado=sentencia.executeQuery(sql);
             existe=resultado.next();
+            resultado.close();
+            sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
