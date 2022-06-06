@@ -16,6 +16,8 @@ public class VtnOperaciones extends MyJFrame {
 
     Conexion bd;
     OperacionesDAO operaciones;
+    PanelPrestamo panelPrestamo;
+    PanelRenovacion panelRenovacion;
     
     public VtnOperaciones(char permiso, Conexion bd) {
         initComponents();
@@ -44,11 +46,13 @@ public class VtnOperaciones extends MyJFrame {
         mnuSalir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(300, 300));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
+        getContentPane().setLayout(new java.awt.FlowLayout());
 
         jMenu1.setText("Opciones");
 
@@ -87,22 +91,11 @@ public class VtnOperaciones extends MyJFrame {
 
         setJMenuBar(jMenuBar1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuRenovacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRenovacionActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_mnuRenovacionActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -119,6 +112,18 @@ public class VtnOperaciones extends MyJFrame {
         pack();
     }//GEN-LAST:event_mnuDesconectarActionPerformed
 
+    private void cleanPanels(){
+        try{
+            this.remove(panelPrestamo);
+        }catch(Exception ex){
+            
+        }try{
+            this.remove(panelRenovacion);
+        }catch(Exception ex){
+            
+        }
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
