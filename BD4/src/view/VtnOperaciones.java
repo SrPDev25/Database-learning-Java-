@@ -25,6 +25,9 @@ public class VtnOperaciones extends MyJFrame {
         this.bd=bd;
         operaciones=new OperacionesDAO(bd);
         
+        if (permiso=='s') {
+            mnuPrestamo.setVisible(false);
+        }
         
     }
 
@@ -57,6 +60,11 @@ public class VtnOperaciones extends MyJFrame {
         jMenu1.setText("Opciones");
 
         mnuPrestamo.setText("Prestamo");
+        mnuPrestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuPrestamoActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnuPrestamo);
 
         mnuRenovacion.setText("Renovación");
@@ -111,6 +119,13 @@ public class VtnOperaciones extends MyJFrame {
         dispose();
         pack();
     }//GEN-LAST:event_mnuDesconectarActionPerformed
+
+    private void mnuPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPrestamoActionPerformed
+        cleanPanels();
+        panelPrestamo=new PanelPrestamo(bd);
+        this.getContentPane().add(panelPrestamo);
+        pack();
+    }//GEN-LAST:event_mnuPrestamoActionPerformed
 
     private void cleanPanels(){
         try{

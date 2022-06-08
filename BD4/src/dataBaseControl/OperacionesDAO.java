@@ -33,7 +33,7 @@ public class OperacionesDAO {
         try {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeQuery(sql);
-            String codigo="";
+            String codigo = "";
             if (resultado.next()) {
                 codigo = resultado.getString("u");
             }
@@ -48,6 +48,22 @@ public class OperacionesDAO {
 
         return permiso;
 
+    }
+
+    public String nombreSocio(int numSocio) {
+        String sql = "select nombre from tbl_usuarios where cod_usuario='s-" + numSocio + "'";
+        Statement sentencia;
+        ResultSet resultado;
+
+        String nombre="";
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeQuery(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return nombre;
     }
 
 }
