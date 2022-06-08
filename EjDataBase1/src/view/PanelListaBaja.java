@@ -6,9 +6,13 @@ package view;
 
 import dataBaseControl.Conexion;
 import dataBaseControl.OperacionesDAO;
+import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Lista;
+import model.ProductoLista;
 
 /**
  *
@@ -18,6 +22,7 @@ public class PanelListaBaja extends javax.swing.JPanel {
 
     Conexion bd;
     OperacionesDAO operaciones;
+    DefaultTableModel tblModel;
     DefaultComboBoxModel comboModel;
 
     public PanelListaBaja(Conexion bd) {
@@ -26,9 +31,15 @@ public class PanelListaBaja extends javax.swing.JPanel {
         operaciones = new OperacionesDAO(bd);
 
         comboModel = new DefaultComboBoxModel();
-
+        tblModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         combo.setModel(comboModel);
-
+        tblProductos.setModel(tblModel);
+        tblModel.setColumnIdentifiers(new String[]{"Codigo","Denominacion","Cantidad"});
         cargarListas();
     }
 
@@ -37,6 +48,24 @@ public class PanelListaBaja extends javax.swing.JPanel {
         comboModel.addAll(operaciones.getListas());
     }
 
+    private void cargarProductos(int lista){
+        cleanTabla();
+        ArrayList <ProductoLista> productos = operaciones.getProductosLista(lista);
+        for(ProductoLista i: productos){
+            Vector v=new Vector();
+            v.add(i.getProducto().getCodigo());
+            v.add(i.getProducto().getDenominacion());
+            v.add(i.getCantidad());
+            tblModel.addRow(v);
+        }
+        
+    }
+    
+    private void cleanTabla(){
+        while(tblModel.getRowCount()!=0){
+            tblModel.removeRow(0);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -46,15 +75,37 @@ public class PanelListaBaja extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         combo = new javax.swing.JComboBox<>();
         btnEliminar = new javax.swing.JButton();
         lblError = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblProductos = new javax.swing.JTable();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setFont(new java.awt.Font("Consolas", 1, 36)); // NOI18N
         jLabel1.setText("BAJA DE LISTAS");
 
         combo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        combo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnEliminar.setText("Eliminar");
@@ -66,6 +117,19 @@ public class PanelListaBaja extends javax.swing.JPanel {
 
         lblError.setForeground(java.awt.Color.red);
 
+        tblProductos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tblProductos);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -73,30 +137,38 @@ public class PanelListaBaja extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(100, 100, 100)
+                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(130, 130, 130)
-                        .addComponent(btnEliminar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(jLabel1)))
-                .addContainerGap(55, Short.MAX_VALUE))
+                        .addGap(50, 50, 50)
+                        .addComponent(btnEliminar)))
+                .addGap(49, 49, 49)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(90, 90, 90))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(43, 43, 43)
-                .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
-                .addComponent(btnEliminar)
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEliminar)
+                        .addContainerGap(61, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -105,21 +177,40 @@ public class PanelListaBaja extends javax.swing.JPanel {
         if (seleccionado != 0) {
             Lista lista = (Lista) (comboModel.getSelectedItem());
             if (operaciones.eliminarLista(lista.getCodigo()) == -1) {
-                JOptionPane.showMessageDialog(this, "No se eliminó la lista", "Error", JOptionPane.WARNING_MESSAGE);
-            } else {
+                JOptionPane.showMessageDialog(this, 
+                        "No se eliminó la lista", "Error en servidor",
+                        JOptionPane.WARNING_MESSAGE);
+                
+            } else if(JOptionPane.showConfirmDialog(this,
+                    "Quiere borrar la lista "+ lista.getDenominacion(),"Borrar",
+                    JOptionPane.WARNING_MESSAGE)==JOptionPane.YES_OPTION){
                 comboModel.removeElement(lista);
                 JOptionPane.showMessageDialog(this, "Eliminado correctamente",
                          "Eliminado", JOptionPane.INFORMATION_MESSAGE);
+                cleanTabla();
             }
         } else
             lblError.setText("No se seleccionó ninguna lista");
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void comboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboActionPerformed
+        int pos=combo.getSelectedIndex();
+        if (pos!=0) {
+            Lista lista = (Lista) comboModel.getElementAt(pos);
+            cargarProductos(lista.getCodigo());
+        }
+        
+    }//GEN-LAST:event_comboActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminar;
     private javax.swing.JComboBox<String> combo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblError;
+    private javax.swing.JTable tblProductos;
     // End of variables declaration//GEN-END:variables
 }

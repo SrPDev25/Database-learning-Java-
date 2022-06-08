@@ -162,7 +162,7 @@ public class PanelListaConsulta extends javax.swing.JPanel {
             }
         });
 
-        btnAnnadir.setText("<<");
+        btnAnnadir.setText("Añadir");
         btnAnnadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAnnadirActionPerformed(evt);
@@ -199,23 +199,23 @@ public class PanelListaConsulta extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(comboProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(btnAplicarCambios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnEliminarProducto)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnAnnadir, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnAplicarCambios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(19, 19, 19)))
                         .addGap(18, 18, 18))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33))))
+                        .addComponent(btnEliminarProducto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAnnadir)
+                        .addGap(33, 33, 33))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,9 +231,9 @@ public class PanelListaConsulta extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAplicarCambios)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnEliminarProducto)
-                            .addComponent(btnAnnadir, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(btnAnnadir))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -267,7 +267,7 @@ public class PanelListaConsulta extends javax.swing.JPanel {
         } else {
             Vector v = new Vector();
             v.add(productoAnnadir);
-            v.add(""+0);
+            v.add("1");
             tblConsultaModel.addRow(v);
         }
     }//GEN-LAST:event_btnAnnadirActionPerformed
@@ -284,7 +284,7 @@ public class PanelListaConsulta extends javax.swing.JPanel {
             for (ProductoLista i : productos) {
                 Vector v = new Vector();
                 v.add(i.getProducto());
-                v.add(""+i.getCantidad());//es necesario insertar un String
+                v.add("" + i.getCantidad());//es necesario insertar un String
                 tblConsultaModel.addRow(v);
             }
         }
@@ -306,16 +306,15 @@ public class PanelListaConsulta extends javax.swing.JPanel {
         if (comboLista.getSelectedIndex() != 0) {
             lista = (Lista) comboListaModel.getElementAt(comboLista.getSelectedIndex());
             for (int i = 0; i < tblConsulta.getRowCount(); i++) {
-                n=Integer.parseInt((String)tblConsultaModel.getValueAt(i, 1)) ;
+                n = Integer.parseInt((String) tblConsultaModel.getValueAt(i, 1));
                 newProductos.add(new ProductoLista((Producto) tblConsultaModel.getValueAt(i, 0),
-                         n));
+                        n));
             }
 
             //Si los productos no siguen igual se producirá el update
             //if (!newProductos.equals(operaciones.getProductosLista(lista.getCodigo()))) {
-                operaciones.actualizarLista(newProductos, lista.getCodigo());
+            operaciones.actualizarLista(newProductos, lista.getCodigo());
             //}
-            
 
         }
 

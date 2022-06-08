@@ -8,6 +8,7 @@ import dataBaseControl.Conexion;
 import dataBaseControl.OperacionesDAO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import model.Categoria;
 import model.Producto;
 
@@ -21,29 +22,29 @@ public class PanelProductoBaja extends javax.swing.JPanel {
     OperacionesDAO operaciones;
     DefaultComboBoxModel comboModel;
     DefaultListModel listModel;
-    
+
     public PanelProductoBaja(Conexion bd) {
         initComponents();
-        this.bd=bd;
-        operaciones=new OperacionesDAO(bd);
-        
-        comboModel=new DefaultComboBoxModel();
+        this.bd = bd;
+        operaciones = new OperacionesDAO(bd);
+
+        comboModel = new DefaultComboBoxModel();
         combo.setModel(comboModel);
-        listModel=new DefaultListModel();
+        listModel = new DefaultListModel();
         listProductos.setModel(listModel);
         cargarCategorias();
         //cargarProductos();
     }
-    
-    private void cargarProductos(){
+
+    private void cargarProductos() {
         listModel.addAll(operaciones.getProductos());
     }
-    
-    private void cargarProductos(int codigoCategoria){
+
+    private void cargarProductos(int codigoCategoria) {
         listModel.addAll(operaciones.getProductos(codigoCategoria));
     }
-    
-    private void cargarCategorias(){
+
+    private void cargarCategorias() {
         comboModel.addElement("Seleciona categoria");
         comboModel.addAll(operaciones.getCategorias());
     }
@@ -142,34 +143,40 @@ public class PanelProductoBaja extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int seleccionado=listProductos.getSelectedIndex();
-        Producto producto=null;
-        
-        if (seleccionado<0) {
+        int seleccionado = listProductos.getSelectedIndex();
+        Producto producto = null;
+
+        if (seleccionado < 0) {
             lblError.setText("No se selecciono un producto");
-        }else{
-            producto=(Producto)listModel.getElementAt(seleccionado);
-            operaciones.eliminarProducto(producto.getCodigo());
-            listModel.removeElement(producto);
-            lblError.setText("");
+        } else {
+            producto = (Producto) listModel.getElementAt(seleccionado);
+            if (JOptionPane.showConfirmDialog(this,
+                    "Estas segura de quere borrar la categoria " + producto,
+                    "Borrar", JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+                operaciones.eliminarProducto(producto.getCodigo());
+                listModel.removeElement(producto);
+                lblError.setText("");
+                JOptionPane.showMessageDialog(this, "Producto borrado correctamente"
+                        , "Borrado", JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void comboMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comboMouseClicked
-        
+
     }//GEN-LAST:event_comboMouseClicked
 
     private void comboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboActionPerformed
         cleanList();
-        if (combo.getSelectedIndex()!=0) {
-            Categoria categoria=(Categoria) comboModel.getElementAt(combo.getSelectedIndex());
+        if (combo.getSelectedIndex() != 0) {
+            Categoria categoria = (Categoria) comboModel.getElementAt(combo.getSelectedIndex());
             cargarProductos(categoria.getCodigo());
-        }else{
+        } else {
             cargarProductos();
         }
     }//GEN-LAST:event_comboActionPerformed
 
-    private void cleanList(){
+    private void cleanList() {
         listModel.removeAllElements();
     }
 

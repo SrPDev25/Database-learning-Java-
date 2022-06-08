@@ -16,35 +16,43 @@ import model.Categoria;
  * @author dam
  */
 public class PanelCategoriasConsulta extends javax.swing.JPanel {
-    
+
     Conexion bd;
     OperacionesDAO operaciones;
     DefaultTableModel modeloTabla;
-    
+
     public PanelCategoriasConsulta(Conexion bd) {
         initComponents();
         this.bd = bd;
-        
+
         operaciones = new OperacionesDAO(bd);
-        modeloTabla = new DefaultTableModel();
+        modeloTabla = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                
+                return false;
+
+            }
+
+        };
         tblConsulta.setModel(modeloTabla);
         modeloTabla.setColumnIdentifiers(new String[]{"Codigo", "Denominacion"});
         cargarCategorias();
         tblConsulta.getTableHeader().setReorderingAllowed(false);
     }
-    
+
     private void cargarCategorias() {
         ArrayList<Categoria> categorias = operaciones.getCategorias();
-        
+
         for (Categoria i : categorias) {
             Vector v = new Vector();
             v.add(i.getCodigo());
             v.add(i.getDenominacion());
             modeloTabla.addRow(v);
         }
-        
+
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

@@ -36,11 +36,11 @@ public class PanelListaAlta extends javax.swing.JPanel {
         comboModel = new DefaultComboBoxModel();
         combo.setModel(comboModel);
         listOpcionesModel = new DefaultListModel();
-        listProductos.setModel(listOpcionesModel);
+        listOpciones.setModel(listOpcionesModel);
         listEnlistadosModel = new DefaultListModel();
         listEnLista.setModel(listEnlistadosModel);
         cargarCategorias();
-        //cargarProductos();
+        txtCantidad.setText("0");
     }
 
     private void cargarProductos() {
@@ -58,7 +58,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
 
     private void clean() {
         listEnlistadosModel.removeAllElements();
-        txtCantidad.setText("");
+        txtCantidad.setText("0");
         txtCodigo.setText("");
         txtDenominacion.setText("");
     }
@@ -75,7 +75,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         combo = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listProductos = new javax.swing.JList<>();
+        listOpciones = new javax.swing.JList<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -110,12 +110,12 @@ public class PanelListaAlta extends javax.swing.JPanel {
             }
         });
 
-        listProductos.setModel(new javax.swing.AbstractListModel<String>() {
+        listOpciones.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(listProductos);
+        jScrollPane1.setViewportView(listOpciones);
 
         jLabel2.setText("Filtro");
 
@@ -123,7 +123,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
 
         jLabel4.setText("Denominacion");
 
-        btnAnnadir.setText(">>");
+        btnAnnadir.setText("Añadir");
         btnAnnadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAnnadirActionPerformed(evt);
@@ -191,27 +191,34 @@ public class PanelListaAlta extends javax.swing.JPanel {
                                         .addComponent(lblErrorLista1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(11, 11, 11)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(btnAnnadir)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnBorrarProducto)
+                                        .addGap(13, 13, 13))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(45, 45, 45)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(btnCancelar)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel5)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(lblErrorCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(69, 69, 69)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(btnCrear)
-                                            .addComponent(btnAnnadir))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(45, 45, 45)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(jLabel5)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(lblErrorCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(btnCrear)
+                                                        .addGap(20, 20, 20))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(btnCancelar)
+                                                        .addGap(5, 5, 5)))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblErrorEnlistados, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -227,10 +234,8 @@ public class PanelListaAlta extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblErrorDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBorrarProducto)))
-                .addContainerGap(12, Short.MAX_VALUE))
+                        .addComponent(lblErrorDenominacion, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,13 +268,14 @@ public class PanelListaAlta extends javax.swing.JPanel {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel5)))
-                        .addGap(5, 5, 5)
-                        .addComponent(btnAnnadir)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAnnadir)
+                            .addComponent(btnBorrarProducto))
+                        .addGap(11, 11, 11)
                         .addComponent(btnCrear)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCancelar))
-                    .addComponent(btnBorrarProducto)
                     .addComponent(jScrollPane1)
                     .addComponent(jScrollPane2))
                 .addContainerGap(44, Short.MAX_VALUE))
@@ -292,7 +298,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
 
     private void btnAnnadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnnadirActionPerformed
         int cantidad = 0;
-        int pos = listProductos.getSelectedIndex();
+        int pos = listOpciones.getSelectedIndex();
         boolean error = false;
         Producto producto;
         ProductoLista productoEnlistado;
@@ -306,8 +312,8 @@ public class PanelListaAlta extends javax.swing.JPanel {
                 error = true;
             }
         } catch (Exception ex) {
-                lblErrorCantidad.setText("*");
-                error = true;
+            lblErrorCantidad.setText("*");
+            error = true;
         }
 
         if (pos < 0) {
@@ -327,11 +333,15 @@ public class PanelListaAlta extends javax.swing.JPanel {
             } else {
                 ProductoLista newAmount = (ProductoLista) (listEnlistadosModel.get(posInModel));
                 newAmount.sumCantidad(cantidad);
+
                 //Añade y elimine un elemento para que actualice la lista
                 listEnlistadosModel.insertElementAt(0, 0);
                 listEnlistadosModel.remove(0);
+                listEnLista.clearSelection();
             }
-
+            //Inicializar producto
+            listOpciones.clearSelection();
+            txtCantidad.setText("0");
         }
     }//GEN-LAST:event_btnAnnadirActionPerformed
 
@@ -412,7 +422,7 @@ public class PanelListaAlta extends javax.swing.JPanel {
     private javax.swing.JLabel lblErrorEnlistados;
     private javax.swing.JLabel lblErrorLista1;
     private javax.swing.JList<String> listEnLista;
-    private javax.swing.JList<String> listProductos;
+    private javax.swing.JList<String> listOpciones;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDenominacion;
