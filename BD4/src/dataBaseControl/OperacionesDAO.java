@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import model.Libro;
 
 /**
  *
@@ -55,15 +55,71 @@ public class OperacionesDAO {
         Statement sentencia;
         ResultSet resultado;
 
-        String nombre="";
+        String nombre = "";
         try {
             sentencia = bd.getConexion().createStatement();
             resultado = sentencia.executeQuery(sql);
+            if (resultado.next()) {
+                nombre=resultado.getString("nombre");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return nombre;
+    }
+
+    public ArrayList<Libro> getLibros() {
+        ArrayList<Libro> libros = new ArrayList<>();
+        String sql = "SELECT ISBN, nombre FROM tbl_libros";
+        Statement sentencia;
+        ResultSet resultado;
+
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeQuery(sql);
+            while (resultado.next()) {
+                libros.add(new Libro(resultado.getString("isbn"),
+                         resultado.getString("nombre")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return libros;
+    }
+
+    public String isExistEjemplar(String isbn) {
+        String sql="select codigo_ejemplar from tbl_ejemplares where isbn='"+isbn+"' and situacion=disponible;";
+        Statement sentencia;
+        ResultSet resultado;
+        String cod_ejemplar="";
+        
+        try {
+            sentencia=bd.getConexion().createStatement();
+            resultado=sentencia.executeQuery(sql);
+            if(resultado.next()){
+                cod_ejemplar=resultado.getString("codigo_ejemplar");
+            }
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return nombre;
+        return cod_ejemplar;
     }
-
+    
+    public int prestarLibro (String codigo_ejemplar,String usuario){
+        String sql="UPDATE `tbl_ejemplares` SET `situacion`='Prestado', codigo_usuario="+usuario+","
+                + " fecha_devolucion=(select CURRENT_DATE) WHERE `codigo_ejemplar`="+codigo_ejemplar+";";
+        Statement sentencia;
+        int resultado=-1;
+        try {
+            sentencia=bd.getConexion().createStatement();
+            resultado=sentencia.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return resultado;
+    }
 }

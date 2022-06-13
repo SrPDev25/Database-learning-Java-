@@ -6,6 +6,10 @@ package view;
 
 import dataBaseControl.Conexion;
 import dataBaseControl.OperacionesDAO;
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import javax.swing.DefaultComboBoxModel;
+import model.Libro;
 
 /**
  *
@@ -15,13 +19,22 @@ public class PanelPrestamo extends javax.swing.JPanel {
 
     Conexion bd;
     OperacionesDAO operaciones;
-    
+    DefaultComboBoxModel cmbLibrosModel;
+
     public PanelPrestamo(Conexion bd) {
         initComponents();
-        this.bd=bd;
-        operaciones= new OperacionesDAO(bd);
-        
-        
+        this.bd = bd;
+        operaciones = new OperacionesDAO(bd);
+
+        cmbLibrosModel = new DefaultComboBoxModel();
+        cmbLibros.setModel(cmbLibrosModel);
+        cargarLibros();
+
+    }
+
+    private void cargarLibros() {
+        cmbLibrosModel.addElement("Elige un libro");
+        cmbLibrosModel.addAll(operaciones.getLibros());
     }
 
     /**
@@ -37,18 +50,29 @@ public class PanelPrestamo extends javax.swing.JPanel {
         txtSocio = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         lblSocio = new javax.swing.JLabel();
-        cbmLibros = new javax.swing.JComboBox<>();
+        cmbLibros = new javax.swing.JComboBox<>();
         jToggleButton1 = new javax.swing.JToggleButton();
 
         jLabel1.setFont(new java.awt.Font("Consolas", 1, 36)); // NOI18N
         jLabel1.setText("PANEL PRESTAMO");
 
+        txtSocio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSocioKeyPressed(evt);
+            }
+        });
+
         jLabel2.setText("Nº Socio");
 
-        cbmLibros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbLibros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jToggleButton1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jToggleButton1.setText("Prestar");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -58,7 +82,7 @@ public class PanelPrestamo extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(cbmLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(100, 100, 100))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -89,16 +113,59 @@ public class PanelPrestamo extends javax.swing.JPanel {
                         .addComponent(txtSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbmLibros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cmbLibros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jToggleButton1)
                 .addContainerGap(23, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        String codEjemplar;
+        String isbn;
+        String codSocio = txtSocio.getText().trim();
+        String nombre;
+        Libro libro;
+        boolean error = false;
+
+        try {
+            nombre = operaciones.nombreSocio(Integer.parseInt(codSocio));
+            if (nombre.isEmpty()) {
+                lblSocio.setText("Socio no existe");
+                lblSocio.setForeground(Color.red);
+            }else{
+                lblSocio.setText(nombre);
+                lblSocio.setForeground(Color.black);
+            }
+        } catch (NumberFormatException ex) {
+            lblSocio.setText("Escriba un número");
+            lblSocio.setForeground(Color.red);
+        }
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    private void txtSocioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSocioKeyPressed
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER) {
+            String nombre;
+            try {
+            nombre = operaciones.nombreSocio(
+                    Integer.parseInt(txtSocio.getText().trim()));
+            if (nombre.isEmpty()) {
+                lblSocio.setText("Socio no existe");
+                lblSocio.setForeground(Color.red);
+            }else{
+                lblSocio.setText(nombre);
+                lblSocio.setForeground(Color.black);
+            }
+        } catch (NumberFormatException ex) {
+            lblSocio.setText("Escriba un número");
+            lblSocio.setForeground(Color.red);
+        }
+        }
+    }//GEN-LAST:event_txtSocioKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> cbmLibros;
+    private javax.swing.JComboBox<String> cmbLibros;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JToggleButton jToggleButton1;
