@@ -359,12 +359,13 @@ public class OperacionesDAO {
                             + "VALUES ('" + lista + "', '" + p.getCodigoProducto() + "'"
                             + ", '" + p.getCantidad() + "');";
                     sentencia.executeUpdate(sql);
-                    //Si ya existe ejecutamos un update de la cantidad
+                    //Si la cantidad del producto ya existente es 0 se elimina
                 } else if (p.getCantidad() == 0) {
                     sql = "delete from tblListas_productos "
                             + "where codigo_producto='" + p.getCodigoProducto() + "'"
                             + " and codigo_lista='" + lista + "'";
                     sentencia.executeUpdate(sql);
+                    //Si ya existe ejecutamos un update de la cantidad
                 } else {
                     sql = "UPDATE `tbllistas_productos` SET `cantidad`='" + p.getCantidad()
                             + "' WHERE `codigo_lista`='" + lista + "' and`codigo_producto`='" + p.getCodigoProducto() + "'";

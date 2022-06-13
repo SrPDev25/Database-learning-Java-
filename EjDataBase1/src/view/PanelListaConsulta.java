@@ -257,18 +257,21 @@ public class PanelListaConsulta extends javax.swing.JPanel {
     }//GEN-LAST:event_comboProductosActionPerformed
 
     private void btnAnnadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnnadirActionPerformed
-        Producto productoAnnadir = (Producto) listOpcionesModel.get(
-                listProductos.getSelectedIndex());
-        int pos = productoEnLista(productoAnnadir);
-        if (pos != -1) {
-            JOptionPane.showMessageDialog(this, "Producto ya en la lista", "Error", JOptionPane.WARNING_MESSAGE);
-        } else if (comboLista.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "No hay lista seleccionada", "Error", JOptionPane.WARNING_MESSAGE);
-        } else {
-            Vector v = new Vector();
-            v.add(productoAnnadir);
-            v.add("1");
-            tblConsultaModel.addRow(v);
+
+        if (listProductos.getSelectedIndex() !=-1) {
+            Producto productoAnnadir = (Producto) listOpcionesModel.get(
+                    listProductos.getSelectedIndex());
+            int pos = productoEnLista(productoAnnadir);
+            if (pos != -1) {
+                JOptionPane.showMessageDialog(this, "Producto ya en la lista", "Error", JOptionPane.WARNING_MESSAGE);
+            } else if (comboLista.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(this, "No hay lista seleccionada", "Error", JOptionPane.WARNING_MESSAGE);
+            } else {
+                Vector v = new Vector();
+                v.add(productoAnnadir);
+                v.add("1");
+                tblConsultaModel.addRow(v);
+            }
         }
     }//GEN-LAST:event_btnAnnadirActionPerformed
 
