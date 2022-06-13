@@ -115,7 +115,7 @@ public class OperacionesDAO {
             try {
                 sentencia = bd.getConexion().createStatement();
                 resultado = sentencia.executeUpdate(sql);
-            sentencia.close();
+                sentencia.close();
             } catch (SQLException ex) {
                 Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -174,7 +174,7 @@ public class OperacionesDAO {
                 categorias.add(new Producto(
                         resultado.getInt("codigo_producto"),
                         resultado.getString("denominacion"),
-                         resultado.getInt("codigo_categoria")));
+                        resultado.getInt("codigo_categoria")));
             }
             resultado.close();
             sentencia.close();
@@ -199,7 +199,7 @@ public class OperacionesDAO {
                 categorias.add(new Producto(
                         resultado.getInt("codigo_producto"),
                         resultado.getString("denominacion"),
-                         resultado.getInt("codigo_categoria")));
+                        resultado.getInt("codigo_categoria")));
             }
             resultado.close();
             sentencia.close();
@@ -221,12 +221,12 @@ public class OperacionesDAO {
                 sentencia = bd.getConexion().createStatement();
                 resultado = sentencia.executeUpdate(sql);
                 insertarProductoEnLista(lista, codigo);
-            sentencia.close();
+                sentencia.close();
             } catch (SQLException ex) {
                 Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return resultado;
     }
 
@@ -242,7 +242,7 @@ public class OperacionesDAO {
             } catch (SQLException ex) {
                 Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (resultado==-1) {
+            if (resultado == -1) {
                 break;
             }
         }
@@ -250,7 +250,7 @@ public class OperacionesDAO {
     }
 
     public int eliminarLista(int codigo) {
-        String sql = "DELETE FROM `tbllistas` WHERE (`codigo_lista` = '"+codigo+"');";
+        String sql = "DELETE FROM `tbllistas` WHERE (`codigo_lista` = '" + codigo + "');";
         Statement sentencia;
         int resultado = -1;
 
@@ -267,8 +267,9 @@ public class OperacionesDAO {
 
     /**
      * Comprueba ya existe la lista
+     *
      * @param codigo
-     * @return 
+     * @return
      */
     public boolean existeLista(int codigo) {
         boolean existe = false;
@@ -314,64 +315,69 @@ public class OperacionesDAO {
 
         return categorias;
     }
-    
-    public ArrayList<ProductoLista> getProductosLista(int codigo){
-        ArrayList<ProductoLista> listaProductos=new ArrayList();
+
+    public ArrayList<ProductoLista> getProductosLista(int codigo) {
+        ArrayList<ProductoLista> listaProductos = new ArrayList();
         //Consulta que coge de la tabla productos y listas_producto
-        String sql="select p.codigo_producto, denominacion , cantidad " +
-                        "from tblListas_productos lp, tblProductos p " +
-                        "where lp.codigo_producto = p.codigo_producto "
-                        + "and lp.codigo_lista='"+codigo+"'";
+        String sql = "select p.codigo_producto, denominacion , cantidad "
+                + "from tblListas_productos lp, tblProductos p "
+                + "where lp.codigo_producto = p.codigo_producto "
+                + "and lp.codigo_lista='" + codigo + "'";
         Statement sentencia;
         ResultSet resultado;
-        
+
         try {
-            sentencia=bd.getConexion().createStatement();
-            resultado=sentencia.executeQuery(sql);
-            
-            while(resultado.next()){
-               listaProductos.add(new ProductoLista(new Producto(
-                       resultado.getInt("p.codigo_producto")
-                       ,resultado.getString("denominacion") )
-                       , resultado.getInt("cantidad")));
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeQuery(sql);
+
+            while (resultado.next()) {
+                listaProductos.add(new ProductoLista(new Producto(
+                        resultado.getInt("p.codigo_producto"),
+                         resultado.getString("denominacion")),
+                         resultado.getInt("cantidad")));
             }
             resultado.close();
             sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         return listaProductos;
     }
 
-    public int actualizarLista(ArrayList<ProductoLista> productos, int lista){
-        ArrayList<ProductoLista> original=getProductosLista(lista);
-        int resultado=0;
+    public int actualizarLista(ArrayList<ProductoLista> productos, int lista) {
+        ArrayList<ProductoLista> original = getProductosLista(lista);
+        int resultado = 0;
         try {
-            Statement sentencia=bd.getConexion().createStatement();
-            for(ProductoLista p: productos){
-                String sql="";
+            Statement sentencia = bd.getConexion().createStatement();
+            for (ProductoLista p : productos) {
+                String sql = "";
                 //Si no existe el producto en esta lista, lo inserta 
                 if (!existeProductoLista(p, lista)) {
-                    sql="INSERT INTO `tbllistas_productos` "
+                    sql = "INSERT INTO `tbllistas_productos` "
                             + "(`codigo_lista`, `codigo_producto`, `cantidad`) "
-                            + "VALUES ('"+lista+"', '"+p.getCodigoProducto()+"'"
-                            + ", '"+p.getCantidad()+"');";
+                            + "VALUES ('" + lista + "', '" + p.getCodigoProducto() + "'"
+                            + ", '" + p.getCantidad() + "');";
                     sentencia.executeUpdate(sql);
-                //Si ya existe ejecutamos un update de la cantidad
-                }else{
-                    sql="UPDATE `tbllistas_productos` SET `cantidad`='"+p.getCantidad()+
-                            "' WHERE `codigo_lista`='"+lista+"' and`codigo_producto`='"+p.getCodigoProducto()+"'";
+                    //Si ya existe ejecutamos un update de la cantidad
+                } else if (p.getCantidad() == 0) {
+                    sql = "delete from tblListas_productos "
+                            + "where codigo_producto='" + p.getCodigoProducto() + "'"
+                            + " and codigo_lista='" + lista + "'";
+                    sentencia.executeUpdate(sql);
+                } else {
+                    sql = "UPDATE `tbllistas_productos` SET `cantidad`='" + p.getCantidad()
+                            + "' WHERE `codigo_lista`='" + lista + "' and`codigo_producto`='" + p.getCodigoProducto() + "'";
                     sentencia.executeUpdate(sql);
                 }
             }
-            
-            for(ProductoLista p: original){
-                if (productos.indexOf(p)==-1) {
-                    String sql="delete from tblListas_productos "
-                            + "where codigo_producto='"+p.getCodigoProducto()+"'"
-                            + " and codigo_lista='"+lista+"'";
+
+            //Si no existe un producto
+            for (ProductoLista p : original) {
+                if (productos.indexOf(p) == -1) {
+                    String sql = "delete from tblListas_productos "
+                            + "where codigo_producto='" + p.getCodigoProducto() + "'"
+                            + " and codigo_lista='" + lista + "'";
                     sentencia.executeUpdate(sql);
                 }
             }
@@ -379,32 +385,31 @@ public class OperacionesDAO {
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         return resultado;
     }
-    
-    
+
     /**
      * Comprueba si un producto ya existe en una lista
+     *
      * @param comprobacion
      * @param lista
-     * @return 
+     * @return
      */
-    private boolean existeProductoLista(ProductoLista comprobacion, int lista){
-        String sql="select * from tblListas_Productos where codigo_lista='"+lista+"' and codigo_producto='"+comprobacion.getCodigoProducto()+"'";
-        boolean existe=false;
+    private boolean existeProductoLista(ProductoLista comprobacion, int lista) {
+        String sql = "select * from tblListas_Productos where codigo_lista='" + lista + "' and codigo_producto='" + comprobacion.getCodigoProducto() + "'";
+        boolean existe = false;
         try {
-            Statement sentencia=bd.getConexion().createStatement();
-            ResultSet resultado=sentencia.executeQuery(sql);
-            existe=resultado.next();
+            Statement sentencia = bd.getConexion().createStatement();
+            ResultSet resultado = sentencia.executeQuery(sql);
+            existe = resultado.next();
             resultado.close();
             sentencia.close();
         } catch (SQLException ex) {
             Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return existe;
     }
-    
+
 }
