@@ -8,6 +8,7 @@ package model;
 
 public class Libro {
 
+    private String cod_ejemplar;
     private String isbn;
     private String nombre;
 
@@ -16,6 +17,17 @@ public class Libro {
         this.nombre = nombre;
     }
 
+    public Libro(String cod_ejemplar, String isbn, String nombre) {
+        this.cod_ejemplar = cod_ejemplar;
+        this.isbn = isbn;
+        this.nombre = nombre;
+    }
+
+    public Libro() {
+    }
+    
+    
+    
     public String getIsbn() {
         return isbn;
     }
@@ -23,6 +35,12 @@ public class Libro {
     public String getNombre() {
         return nombre;
     }
+
+    public String getCod_ejemplar() {
+        return cod_ejemplar;
+    }
+    
+    
 
     @Override
     public String toString() {

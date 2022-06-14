@@ -4,17 +4,51 @@
  */
 package view;
 
+import dataBaseControl.Conexion;
+import dataBaseControl.OperacionesDAO;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import model.Libro;
+import model.Usuario;
+
 /**
  *
  * @author dam
  */
 public class PanelRenovacion extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PanelRenovacion
-     */
-    public PanelRenovacion() {
+    OperacionesDAO operaciones;
+    String codigo_usuario;
+    DefaultComboBoxModel cmbUsuariosModel;
+    DefaultListModel listLibrosModel;
+
+    public PanelRenovacion(Conexion bd, String codigo_usuario, char tipoUsuario) {
         initComponents();
+        operaciones = new OperacionesDAO(bd);
+        
+        listLibrosModel= new DefaultListModel();
+        listLibros.setModel(listLibrosModel);
+        if (tipoUsuario == 's') {
+            cmbUsuarios.setVisible(false);
+            cargarLIbros(codigo_usuario);
+            this.codigo_usuario = codigo_usuario;
+        } else {
+            cmbUsuariosModel = new DefaultComboBoxModel();
+            cmbUsuarios.setModel(cmbUsuariosModel);
+            cargarUsuarios();
+            this.codigo_usuario="";
+        }
+
+    }
+
+    private void cargarUsuarios() {
+        cmbUsuariosModel.addElement("Elige un usuario");
+        cmbUsuariosModel.addAll(operaciones.getUsuarios());
+    }
+    
+    private void cargarLIbros(String codigo_usuario){
+        listLibrosModel.addAll(operaciones.getLibros(codigo_usuario));
     }
 
     /**
@@ -26,19 +60,144 @@ public class PanelRenovacion extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listLibros = new javax.swing.JList<>();
+        btnRenovar = new javax.swing.JButton();
+        cmbUsuarios = new javax.swing.JComboBox<>();
+        lblErrorRenovacion = new javax.swing.JLabel();
+
+        jLabel1.setFont(new java.awt.Font("Consolas", 1, 36)); // NOI18N
+        jLabel1.setText("RENOVACIÓN DE LIBROS");
+
+        listLibros.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        listLibros.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listLibros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listLibrosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(listLibros);
+
+        btnRenovar.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnRenovar.setText("RENOVAR");
+        btnRenovar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRenovarActionPerformed(evt);
+            }
+        });
+
+        cmbUsuarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbUsuariosActionPerformed(evt);
+            }
+        });
+
+        lblErrorRenovacion.setForeground(java.awt.Color.red);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(lblErrorRenovacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(cmbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnRenovar)
+                                .addGap(33, 33, 33))))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(50, 50, 50)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cmbUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblErrorRenovacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRenovar)
+                        .addGap(6, 6, 6))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cmbUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbUsuariosActionPerformed
+        Usuario usuario;
+        int pos=cmbUsuarios.getSelectedIndex();
+        listLibrosModel.removeAllElements();
+        
+        if (pos!=0) {
+            usuario=(Usuario) cmbUsuariosModel.getElementAt(pos);
+            cargarLIbros(usuario.getCodigoUsuario());
+        }
+    }//GEN-LAST:event_cmbUsuariosActionPerformed
+
+    private void listLibrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listLibrosMouseClicked
+       
+    }//GEN-LAST:event_listLibrosMouseClicked
+
+    private void btnRenovarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRenovarActionPerformed
+         int pos=listLibros.getSelectedIndex();
+         boolean posible=false;
+        Libro libro=new Libro();
+        
+        if (pos>-1) {
+            libro=(Libro) listLibrosModel.getElementAt(pos);
+            pos=operaciones.comprobarRenovacion(libro.getCod_ejemplar());
+            switch(pos){
+                case 1:posible=true;
+                    lblErrorRenovacion.setText("");
+                    break;
+                case -1:
+                    lblErrorRenovacion.setText("Error de servidor");
+                    break;
+                case -2:
+                    lblErrorRenovacion.setText("Se pasó de fecha de devolución");
+                    break;
+                default:
+                    lblErrorRenovacion.setText("Ya fué renovado");
+                    break;
+            }
+        }
+        
+      if (posible){
+         operaciones.renovar(libro.getCod_ejemplar());
+          JOptionPane.showMessageDialog(this, "Libro renovado", "Informacion",JOptionPane.INFORMATION_MESSAGE);
+      }
+        
+    }//GEN-LAST:event_btnRenovarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRenovar;
+    private javax.swing.JComboBox<String> cmbUsuarios;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblErrorRenovacion;
+    private javax.swing.JList<String> listLibros;
     // End of variables declaration//GEN-END:variables
 }

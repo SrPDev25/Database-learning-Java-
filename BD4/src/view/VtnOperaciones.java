@@ -18,14 +18,18 @@ public class VtnOperaciones extends MyJFrame {
     OperacionesDAO operaciones;
     PanelPrestamo panelPrestamo;
     PanelRenovacion panelRenovacion;
+    String codigo_usuario;
+    char tipoUsuario;
     
-    public VtnOperaciones(char permiso, Conexion bd) {
+    public VtnOperaciones(char tipoUsuario,String codigo_usuario, Conexion bd) {
         initComponents();
         centrar();
         this.bd=bd;
+        this.codigo_usuario=codigo_usuario;
+        this.tipoUsuario=tipoUsuario;
         operaciones=new OperacionesDAO(bd);
         
-        if (permiso=='s') {
+        if (tipoUsuario=='s') {
             mnuPrestamo.setVisible(false);
         }
         
@@ -103,7 +107,10 @@ public class VtnOperaciones extends MyJFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuRenovacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuRenovacionActionPerformed
-        
+        cleanPanels();
+        panelRenovacion=new PanelRenovacion(bd, codigo_usuario,tipoUsuario);
+        this.getContentPane().add(panelRenovacion);
+        pack();
     }//GEN-LAST:event_mnuRenovacionActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

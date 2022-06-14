@@ -148,31 +148,35 @@ public class VtnLogin extends MyJFrame {
         String pass = new String(pswPass.getPassword());
         boolean error = false;
         //Confirmacion con metodo char
-        char tipo = ' ';
+        String usuario = "";
+        String[] usuarioDiv;
         if (login.isBlank()) {
             error = true;
             lblError.setText("Usuario o contraseña erroneos");
-        }else{
+        } else {
             lblError.setText("");
-            
+
         }
 
         if (pass.isBlank()) {
             error = true;
             lblError.setText("Usuario o contraseña erroneos");
-        }else
+        } else {
             lblError.setText("");
+        }
 
         if (!error) {
-            tipo=operaciones.verificarUsuario(login, Encriptar.getMD5(pass));
-            if (tipo != ' ') {
-            new VtnOperaciones(tipo,bd).setVisible(true);
-            dispose();
-            pack();
+            usuario = operaciones.verificarUsuario(login, Encriptar.getMD5(pass));
+            usuarioDiv = usuario.split("/");
+            if (!usuario.isEmpty()) {
+                //obtiene el tipo de usuario en el 0 y el codigo usuario en el 1
+                new VtnOperaciones(usuarioDiv[0].charAt(0), usuarioDiv[1], bd).setVisible(true);
+                dispose();
+                pack();
             }
 
-        }else{
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos","Error",JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.WARNING_MESSAGE);
         }
 
 
@@ -183,13 +187,13 @@ public class VtnLogin extends MyJFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void txtLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoginKeyPressed
-        if (evt.getKeyCode()==KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             pswPass.requestFocus();
         }
     }//GEN-LAST:event_txtLoginKeyPressed
 
     private void pswPassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pswPassKeyPressed
-        if (evt.getKeyCode()==KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnLogin.doClick();
         }
     }//GEN-LAST:event_pswPassKeyPressed

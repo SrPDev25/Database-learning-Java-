@@ -17,13 +17,13 @@ import model.Libro;
  */
 public class PanelPrestamo extends javax.swing.JPanel {
 
-    Conexion bd;
+    //Conexion bd;//No hace falta guardar la conexion ya que la tiene operaciones
     OperacionesDAO operaciones;
     DefaultComboBoxModel cmbLibrosModel;
 
     public PanelPrestamo(Conexion bd) {
         initComponents();
-        this.bd = bd;
+        //this.bd = bd;
         operaciones = new OperacionesDAO(bd);
 
         cmbLibrosModel = new DefaultComboBoxModel();
