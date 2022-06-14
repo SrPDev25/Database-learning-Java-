@@ -123,6 +123,6 @@ public class OperacionesDAO {
         
         return resultado;
     }
-    
+//    select codigo_ejemplar from tbl_ejemplares where fecha_devolucion<current_date and codigo_ejemplar='';
     
 }
