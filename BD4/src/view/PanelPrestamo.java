@@ -51,7 +51,8 @@ public class PanelPrestamo extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         lblSocio = new javax.swing.JLabel();
         cmbLibros = new javax.swing.JComboBox<>();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        btnPrestar = new javax.swing.JToggleButton();
+        lblErrorEjemplares = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Consolas", 1, 36)); // NOI18N
         jLabel1.setText("PANEL PRESTAMO");
@@ -66,13 +67,15 @@ public class PanelPrestamo extends javax.swing.JPanel {
 
         cmbLibros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jToggleButton1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jToggleButton1.setText("Prestar");
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnPrestar.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnPrestar.setText("Prestar");
+        btnPrestar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
+                btnPrestarActionPerformed(evt);
             }
         });
+
+        lblErrorEjemplares.setForeground(java.awt.Color.red);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -83,19 +86,20 @@ public class PanelPrestamo extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cmbLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(100, 100, 100))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblErrorEjemplares, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24))))
+                        .addComponent(lblSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(24, 24, 24))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 69, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jToggleButton1)
+                        .addComponent(btnPrestar)
                         .addGap(19, 19, 19))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -113,35 +117,57 @@ public class PanelPrestamo extends javax.swing.JPanel {
                         .addComponent(txtSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cmbLibros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cmbLibros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblErrorEjemplares, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(jToggleButton1)
+                .addComponent(btnPrestar)
                 .addContainerGap(23, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void btnPrestarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestarActionPerformed
         String codEjemplar;
         String isbn;
         String codSocio = txtSocio.getText().trim();
         String nombre;
         Libro libro;
         boolean error = false;
+        int posLibro=cmbLibros.getSelectedIndex();
 
         try {
             nombre = operaciones.nombreSocio(Integer.parseInt(codSocio));
             if (nombre.isEmpty()) {
                 lblSocio.setText("Socio no existe");
                 lblSocio.setForeground(Color.red);
+                error = true;
             }else{
                 lblSocio.setText(nombre);
-                lblSocio.setForeground(Color.black);
+                lblSocio.setForeground(Color.BLACK);
             }
         } catch (NumberFormatException ex) {
             lblSocio.setText("Escriba un número");
             lblSocio.setForeground(Color.red);
+            error = true;
         }
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+        
+        if (posLibro==0) {
+            error=true;
+        }
+        
+        if (!error) {
+            libro=(Libro)cmbLibrosModel.getElementAt(posLibro);
+            codEjemplar=operaciones.isExistEjemplar(libro.getIsbn());
+            if (codEjemplar.isEmpty()) {
+                lblErrorEjemplares.setText("No quedan ejemplares");
+            }else{
+                lblErrorEjemplares.setText("");
+                operaciones.prestarLibro(codEjemplar, codSocio);
+            }
+            
+        }
+        
+    }//GEN-LAST:event_btnPrestarActionPerformed
 
     private void txtSocioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSocioKeyPressed
         if (evt.getKeyCode()==KeyEvent.VK_ENTER) {
@@ -165,10 +191,11 @@ public class PanelPrestamo extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton btnPrestar;
     private javax.swing.JComboBox<String> cmbLibros;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JLabel lblErrorEjemplares;
     private javax.swing.JLabel lblSocio;
     private javax.swing.JTextField txtSocio;
     // End of variables declaration//GEN-END:variables

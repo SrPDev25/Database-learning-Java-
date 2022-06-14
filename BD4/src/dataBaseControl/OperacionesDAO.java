@@ -26,7 +26,7 @@ public class OperacionesDAO {
 
     public char verificarUsuario(String login, String pass) {
         Character permiso = ' ';
-        String sql = "select cod_usuario u from tbl_usuarios where login='" + login + "' and pass='" + pass + "'";
+        String sql = "select tipo_usuario from tbl_usuarios where login='" + login + "' and pass='" + pass + "'";
         Statement sentencia;
         ResultSet resultado;
 
@@ -35,7 +35,7 @@ public class OperacionesDAO {
             resultado = sentencia.executeQuery(sql);
             String codigo = "";
             if (resultado.next()) {
-                codigo = resultado.getString("u");
+                codigo = resultado.getString("tipo_usuario");
             }
             if (codigo.length() != 0) {
                 permiso = codigo.charAt(0);
@@ -51,7 +51,7 @@ public class OperacionesDAO {
     }
 
     public String nombreSocio(int numSocio) {
-        String sql = "select nombre from tbl_usuarios where cod_usuario='s-" + numSocio + "'";
+        String sql = "select nombre from tbl_usuarios where cod_usuario='" + numSocio + "'";
         Statement sentencia;
         ResultSet resultado;
 
@@ -90,7 +90,7 @@ public class OperacionesDAO {
     }
 
     public String isExistEjemplar(String isbn) {
-        String sql="select codigo_ejemplar from tbl_ejemplares where isbn='"+isbn+"' and situacion=disponible;";
+        String sql="select codigo_ejemplar from tbl_ejemplares where isbn='"+isbn+"' and situacion='disponible';";
         Statement sentencia;
         ResultSet resultado;
         String cod_ejemplar="";
@@ -110,7 +110,8 @@ public class OperacionesDAO {
     
     public int prestarLibro (String codigo_ejemplar,String usuario){
         String sql="UPDATE `tbl_ejemplares` SET `situacion`='Prestado', codigo_usuario="+usuario+","
-                + " fecha_devolucion=(select CURRENT_DATE) WHERE `codigo_ejemplar`="+codigo_ejemplar+";";
+                + " fecha_devolucion=(select DATE_ADD(current_date, INTERVAL 15 DAY))"
+                + " WHERE `codigo_ejemplar`="+codigo_ejemplar+";";
         Statement sentencia;
         int resultado=-1;
         try {
@@ -122,4 +123,6 @@ public class OperacionesDAO {
         
         return resultado;
     }
+    
+    
 }

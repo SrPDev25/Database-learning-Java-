@@ -34,8 +34,8 @@ CREATE TABLE `tbl_ejemplares` (
   PRIMARY KEY (`codigo_ejemplar`),
   KEY `isbn_idx` (`isbn`),
   KEY `usuario_idx` (`codigo_usuario`),
-  CONSTRAINT `usuario` FOREIGN KEY (`codigo_usuario`) REFERENCES `tbl_usuarios` (`cod_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `isbn` FOREIGN KEY (`isbn`) REFERENCES `tbl_libros` (`isbn`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `isbn` FOREIGN KEY (`isbn`) REFERENCES `tbl_libros` (`isbn`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `usuario` FOREIGN KEY (`codigo_usuario`) REFERENCES `tbl_usuarios` (`cod_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -45,7 +45,7 @@ CREATE TABLE `tbl_ejemplares` (
 
 LOCK TABLES `tbl_ejemplares` WRITE;
 /*!40000 ALTER TABLE `tbl_ejemplares` DISABLE KEYS */;
-INSERT INTO `tbl_ejemplares` VALUES (1,'234564','Disponible',NULL,NULL,'no'),(2,'234564','Disponible',NULL,NULL,'no'),(3,'234564','Disponible',NULL,NULL,'no'),(4,'234564','Disponible',NULL,NULL,'no'),(5,'745123','Disponible',NULL,NULL,'no'),(6,'745123','Disponible',NULL,NULL,'no'),(7,'745123','Disponible',NULL,NULL,'no'),(8,'784223','Disponible',NULL,NULL,'no'),(9,'784223','Disponible',NULL,NULL,'no'),(10,'784223','Disponible',NULL,NULL,'no'),(11,'784223','Disponible',NULL,NULL,'no'),(12,'784223','Disponible',NULL,NULL,'no'),(13,'784223','Disponible',NULL,NULL,'no');
+INSERT INTO `tbl_ejemplares` VALUES (1,'234564','Prestado','2022-06-29','0','no'),(2,'234564','Prestado','2022-06-29','1','no'),(3,'234564','Disponible',NULL,NULL,'no'),(4,'234564','Disponible',NULL,NULL,'no'),(5,'745123','Disponible',NULL,NULL,'no'),(6,'745123','Disponible',NULL,NULL,'no'),(7,'745123','Disponible',NULL,NULL,'no'),(8,'784223','Prestado','2022-06-29','1','no'),(9,'784223','Disponible',NULL,NULL,'no'),(10,'784223','Disponible',NULL,NULL,'no'),(11,'784223','Disponible',NULL,NULL,'no'),(12,'784223','Disponible',NULL,NULL,'no'),(13,'784223','Disponible',NULL,NULL,'no');
 /*!40000 ALTER TABLE `tbl_ejemplares` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,7 +58,7 @@ DROP TABLE IF EXISTS `tbl_libros`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbl_libros` (
   `isbn` varchar(20) NOT NULL,
-  `nombre` varchar(40) NOT NULL,
+  `nombre` varchar(80) NOT NULL,
   PRIMARY KEY (`isbn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -69,7 +69,7 @@ CREATE TABLE `tbl_libros` (
 
 LOCK TABLES `tbl_libros` WRITE;
 /*!40000 ALTER TABLE `tbl_libros` DISABLE KEYS */;
-INSERT INTO `tbl_libros` VALUES ('234564','Harry Potter y los secretos ibericos'),('745123','Harry Potter and Half-gram weed'),('784223','Harry Potter y la orden de alejamiento');
+INSERT INTO `tbl_libros` VALUES ('102564','El capital'),('234564','Harry Potter y los secretos ibericos'),('745123','Harry Potter y las reliquias de la abuela'),('784223','Harry Potter y la orden de alejamiento');
 /*!40000 ALTER TABLE `tbl_libros` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,6 +85,7 @@ CREATE TABLE `tbl_usuarios` (
   `nombre` varchar(30) NOT NULL,
   `login` varchar(40) NOT NULL,
   `pass` varchar(45) NOT NULL,
+  `tipo_usuario` varchar(1) NOT NULL,
   PRIMARY KEY (`cod_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -95,7 +96,7 @@ CREATE TABLE `tbl_usuarios` (
 
 LOCK TABLES `tbl_usuarios` WRITE;
 /*!40000 ALTER TABLE `tbl_usuarios` DISABLE KEYS */;
-INSERT INTO `tbl_usuarios` VALUES ('a-0','admin','0','cfcd208495d565ef66e7dff9f98764da'),('s-1','socio','1','c4ca4238a0b923820dcc509a6f75849b');
+INSERT INTO `tbl_usuarios` VALUES ('0','admin','0','cfcd208495d565ef66e7dff9f98764da','a'),('1','socio_pepe','1','c4ca4238a0b923820dcc509a6f75849b','s'),('2','socio_CJ','cj','c4ca4238a0b923820dcc509a6f75849b','s');
 /*!40000 ALTER TABLE `tbl_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -108,4 +109,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-06 10:08:19
+-- Dump completed on 2022-06-14 13:49:58
