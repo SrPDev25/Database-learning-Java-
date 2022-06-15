@@ -9,6 +9,7 @@ import dataBaseControl.OperacionesDAO;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import model.Libro;
 
 /**
@@ -133,7 +134,7 @@ public class PanelPrestamo extends javax.swing.JPanel {
         String nombre;
         Libro libro;
         boolean error = false;
-        int posLibro=cmbLibros.getSelectedIndex();
+        int posLibro = cmbLibros.getSelectedIndex();
 
         try {
             nombre = operaciones.nombreSocio(Integer.parseInt(codSocio));
@@ -141,7 +142,7 @@ public class PanelPrestamo extends javax.swing.JPanel {
                 lblSocio.setText("Socio no existe");
                 lblSocio.setForeground(Color.red);
                 error = true;
-            }else{
+            } else {
                 lblSocio.setText(nombre);
                 lblSocio.setForeground(Color.BLACK);
             }
@@ -150,42 +151,50 @@ public class PanelPrestamo extends javax.swing.JPanel {
             lblSocio.setForeground(Color.red);
             error = true;
         }
-        
-        if (posLibro==0) {
-            error=true;
+
+        if (posLibro == 0) {
+            error = true;
         }
-        
+
         if (!error) {
-            libro=(Libro)cmbLibrosModel.getElementAt(posLibro);
-            codEjemplar=operaciones.isExistEjemplar(libro.getIsbn());
+            libro = (Libro) cmbLibrosModel.getElementAt(posLibro);
+            codEjemplar = operaciones.isExistEjemplar(libro.getIsbn());
             if (codEjemplar.isEmpty()) {
                 lblErrorEjemplares.setText("No quedan ejemplares");
-            }else{
-                lblErrorEjemplares.setText("");
+            } else {
                 operaciones.prestarLibro(codEjemplar, codSocio);
+                JOptionPane.showMessageDialog(this, "Libro prestado", "PRESTADO", JOptionPane.INFORMATION_MESSAGE);
+                clean();
             }
-            
+
         }
-        
+
     }//GEN-LAST:event_btnPrestarActionPerformed
 
+    private void clean() {
+        lblErrorEjemplares.setText("");
+        lblSocio.setText("");
+        cmbLibros.setSelectedIndex(0);
+        txtSocio.setText("");
+    }
+
     private void txtSocioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSocioKeyPressed
-        if (evt.getKeyCode()==KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             String nombre;
             try {
-            nombre = operaciones.nombreSocio(
-                    Integer.parseInt(txtSocio.getText().trim()));
-            if (nombre.isEmpty()) {
-                lblSocio.setText("Socio no existe");
+                nombre = operaciones.nombreSocio(
+                        Integer.parseInt(txtSocio.getText().trim()));
+                if (nombre.isEmpty()) {
+                    lblSocio.setText("Socio no existe");
+                    lblSocio.setForeground(Color.red);
+                } else {
+                    lblSocio.setText(nombre);
+                    lblSocio.setForeground(Color.black);
+                }
+            } catch (NumberFormatException ex) {
+                lblSocio.setText("Escriba un número");
                 lblSocio.setForeground(Color.red);
-            }else{
-                lblSocio.setText(nombre);
-                lblSocio.setForeground(Color.black);
             }
-        } catch (NumberFormatException ex) {
-            lblSocio.setText("Escriba un número");
-            lblSocio.setForeground(Color.red);
-        }
         }
     }//GEN-LAST:event_txtSocioKeyPressed
 

@@ -19,7 +19,7 @@ import model.Usuario;
 public class PanelRenovacion extends javax.swing.JPanel {
 
     OperacionesDAO operaciones;
-    String codigo_usuario;
+//    String codigo_usuario;
     DefaultComboBoxModel cmbUsuariosModel;
     DefaultListModel listLibrosModel;
 
@@ -32,12 +32,12 @@ public class PanelRenovacion extends javax.swing.JPanel {
         if (tipoUsuario == 's') {
             cmbUsuarios.setVisible(false);
             cargarLIbros(codigo_usuario);
-            this.codigo_usuario = codigo_usuario;
+//            this.codigo_usuario = codigo_usuario;
         } else {
             cmbUsuariosModel = new DefaultComboBoxModel();
             cmbUsuarios.setModel(cmbUsuariosModel);
             cargarUsuarios();
-            this.codigo_usuario="";
+//            this.codigo_usuario="";
         }
 
     }

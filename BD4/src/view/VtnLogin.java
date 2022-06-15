@@ -173,10 +173,12 @@ public class VtnLogin extends MyJFrame {
                 new VtnOperaciones(usuarioDiv[0].charAt(0), usuarioDiv[1], bd).setVisible(true);
                 dispose();
                 pack();
+            }else{
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.WARNING_MESSAGE);
             }
 
         } else {
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos", "Error", JOptionPane.WARNING_MESSAGE);
+            
         }
 
 

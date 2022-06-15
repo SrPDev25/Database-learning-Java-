@@ -245,7 +245,7 @@ public class OperacionesDAO {
     
     public int renovar(String codEjemplar){
         String sql = "UPDATE `tbl_ejemplares` SET renovado='si', "
-                + "fecha_devolucion=(select DATE_ADD(fecha_devolucion, INTERVAL 15 DAY)) " 
+                + "fecha_devolucion=(select DATE_ADD(current_date, INTERVAL 15 DAY)) " 
                 + "WHERE `codigo_ejemplar`='"+codEjemplar+"';";
         Statement sentencia;
         int resultado = -1;
