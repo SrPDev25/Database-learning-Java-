@@ -154,14 +154,20 @@ public class PanelPrestamo extends javax.swing.JPanel {
 
         if (posLibro == 0) {
             error = true;
+        }else{
+            
         }
+        
+        
 
         if (!error) {
             libro = (Libro) cmbLibrosModel.getElementAt(posLibro);
             codEjemplar = operaciones.isExistEjemplar(libro.getIsbn());
             if (codEjemplar.isEmpty()) {
                 lblErrorEjemplares.setText("No quedan ejemplares");
-            } else {
+            } else if(operaciones.isYaPrestado(libro.getIsbn(), codSocio)){
+                lblErrorEjemplares.setText("Ya prestado");
+            }else{
                 operaciones.prestarLibro(codEjemplar, codSocio);
                 JOptionPane.showMessageDialog(this, "Libro prestado", "PRESTADO", JOptionPane.INFORMATION_MESSAGE);
                 clean();
@@ -176,6 +182,8 @@ public class PanelPrestamo extends javax.swing.JPanel {
         lblSocio.setText("");
         cmbLibros.setSelectedIndex(0);
         txtSocio.setText("");
+        cmbLibrosModel.removeAllElements();
+        cargarLibros();
     }
 
     private void txtSocioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSocioKeyPressed

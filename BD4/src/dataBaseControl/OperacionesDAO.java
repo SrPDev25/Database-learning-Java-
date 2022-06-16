@@ -90,7 +90,8 @@ public class OperacionesDAO {
     
     public ArrayList<Libro> getLibros() {
         ArrayList<Libro> libros = new ArrayList<>();
-        String sql = "SELECT ISBN, nombre FROM tbl_libros";
+        String sql = "select l.* from tbl_libros l, tbl_ejemplares e where "
+                + "l.isbn=e.isbn and situacion='Disponible' group by isbn";
         Statement sentencia;
         ResultSet resultado;
         
@@ -146,6 +147,25 @@ public class OperacionesDAO {
         }
         
         return cod_ejemplar;
+    }
+    
+    public boolean isYaPrestado(String isbn, String cod_usuario){
+        String sql = "select e.* from tbl_usuarios l, tbl_ejemplares e"
+                + " where l.cod_usuario=e.codigo_usuario and codigo_usuario='"+cod_usuario+"'"
+                + " and isbn='"+isbn+"' group by codigo_ejemplar";
+        Statement sentencia;
+        ResultSet resultado;
+        boolean yaPrestado=false;
+        
+        try {
+            sentencia = bd.getConexion().createStatement();
+            resultado = sentencia.executeQuery(sql);
+            yaPrestado=resultado.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(OperacionesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return yaPrestado;
     }
     
     public int prestarLibro(String codigo_ejemplar, String usuario) {
